@@ -94,6 +94,34 @@ router.get("/teacher-dashboard", authMiddleware, roleMiddleware(["teacher", "adm
 router.get("/student-dashboard", authMiddleware, (req, res) => {
   res.json({ message: `Welcome ${req.user.role}!` });
 });
+router.get("/profile", (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
 
+    if (!authHeader) {
+      return res.status(401).json({ message: "No token provided" });
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    res.json({
+      user: decoded
+    });
+
+  } catch (error) {
+    res.status(401).json({ message: "Invalid token" });
+  }
+});
+router.get("/users", async (req, res) => {
+  try {
+    const users = await User.find().select("_id name email role");
+
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 module.exports = router;
