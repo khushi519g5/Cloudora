@@ -7,6 +7,9 @@ import AdminDashboard from "./AdminDashboard.jsx";
 import TeacherDashboard from "./TeacherDashboard.jsx";
 import StudentDashboard from "./StudentDashboard.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
+import AskAI from "./AskAI";
+import Navbar from './navbar.jsx';
+
 
 function App() {
   return (
@@ -63,6 +66,8 @@ function App() {
 
       {/* Default redirect */}
       <Route path="*" element={<Navigate to="/login" />} />
+      
+      <Route path="/ask-ai" element={<AskAI />} />
     </Routes>
   );
 }

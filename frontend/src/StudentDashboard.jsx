@@ -1,394 +1,385 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import socket from "./socket";
+import Navbar from './Navbar';
+import { 
+  Search, BookOpen, Users, Send, X, 
+  MessageCircle, ExternalLink, GraduationCap, Layout 
+} from "lucide-react";
+
+import bookIcon from "./assets/notes.png";
+import HomeIcon from "./assets/house.png";
 
 function Dashboard() {
   const [user, setUser] = useState(null);
   const [resources, setResources] = useState([]);
   const [search, setSearch] = useState("");
   const [users, setUsers] = useState([]);
-
-  // 🔥 CHAT STATES
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
   const [showChat, setShowChat] = useState(false);
+  const [activeTab, setActiveTab] = useState(null);
+  const [activeUserId, setActiveUserId] = useState(null);
+  
+  const scrollRef = useRef(null);
 
-  // 🔹 Fetch resources
   useEffect(() => {
-    const fetchResources = async () => {
+    const fetchData = async () => {
+      const token = localStorage.getItem("token");
       try {
-        const res = await axios.get("http://localhost:5000/api/resources");
-        setResources(res.data);
+        const [resContent, resProfile, resUsers] = await Promise.all([
+          axios.get("http://localhost:5000/api/resources"),
+          axios.get("http://localhost:5000/api/auth/profile", {
+            headers: { Authorization: `Bearer ${token}` }
+          }),
+          axios.get("http://localhost:5000/api/auth/users")
+        ]);
+        setResources(resContent.data);
+        setUser(resProfile.data.user);
+        setUsers(resUsers.data);
       } catch (error) {
-        console.log(error);
+        console.error("Initialization error:", error);
       }
     };
-    fetchResources();
+    fetchData();
   }, []);
 
-  // 🔹 Fetch user profile
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/api/auth/profile", {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setUser(res.data.user);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchProfile();
-  }, []);
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
-  // 🔹 Fetch all users
-  useEffect(() => {
-    axios.get("http://localhost:5000/api/auth/users")
-      .then(res => setUsers(res.data))
-      .catch(err => console.log(err));
-  }, []);
-
-  // 🔥 JOIN SOCKET
   useEffect(() => {
     const currentUserId = user?._id || user?.id;
-
-    if (currentUserId) {
-      socket.emit("join_user", currentUserId);
-    }
+    if (currentUserId) socket.emit("join_user", currentUserId);
   }, [user]);
 
-  // 🔥 FETCH OLD MESSAGES
   useEffect(() => {
     if (!selectedUser || !user) return;
-
     const currentUserId = user?._id || user?.id;
-    if (!currentUserId) return;
-
-    axios
-      .get(`http://localhost:5000/api/messages/${currentUserId}/${selectedUser._id}`)
-      .then(res => {
-        setMessages(res.data);
-      })
+    axios.get(`http://localhost:5000/api/messages/${currentUserId}/${selectedUser._id}`)
+      .then(res => setMessages(res.data))
       .catch(err => console.log(err));
-
   }, [selectedUser, user]);
 
-  // 🔥 RECEIVE MESSAGE (REALTIME)
   useEffect(() => {
     const handleMessage = (data) => {
-      const currentUserId = user?._id || user?.id;
-
-      if (!currentUserId || !selectedUser) return;
-
-      // Only update current chat
-      if (
-        data.senderId === selectedUser._id ||
-        data.receiverId === selectedUser._id
-      ) {
+      if (data.senderId === selectedUser?._id || data.receiverId === selectedUser?._id) {
         setMessages(prev => [...prev, data]);
       }
     };
-
     socket.on("receive_message", handleMessage);
     return () => socket.off("receive_message", handleMessage);
-  }, [user, selectedUser]);
+  }, [selectedUser]);
 
-  // 🔥 SEND MESSAGE (FIXED)
-  const sendMessage = async () => {
+  const sendMessage = () => {
     const currentUserId = user?._id || user?.id;
-
-    if (!currentUserId) {
-      alert("User not loaded yet");
-      return;
-    }
-
-    if (!selectedUser?._id) {
-      alert("Select user first");
-      return;
-    }
-
-    if (!input.trim()) {
-      alert("Empty message");
-      return;
-    }
-
+    if (!currentUserId || !selectedUser || !input.trim()) return;
     const data = {
       senderId: currentUserId,
       receiverId: selectedUser._id,
       message: input.trim()
     };
-
-    try {
-      // ✅ ONLY SOCKET (NO AXIOS HERE)
-      socket.emit("send_message", data);
-      setInput("");
-    } catch (err) {
-      console.log(err);
-    }
+    socket.emit("send_message", data);
+    setInput("");
   };
 
-  // 🔹 Filter resources
   const filteredResources = resources.filter(res =>
     res.title.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <div style={styles.page}>
-      {/* NAVBAR */}
-      <div style={styles.navbar}>
-        <div style={styles.logo}>✨ ResourceHub</div>
-        <div style={styles.navRight}>
-          <input
-            placeholder="Search resources..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            style={styles.search}
-          />
-          <button
-            style={styles.logoutBtn}
-            onClick={() => {
-              localStorage.removeItem("token");
-              window.location.href = "/login";
-            }}
-          >
-            Logout
-          </button>
+      <Navbar />
+
+      <div style={styles.container}>
+        {/* HEADER AREA */}
+        <div style={styles.topRow}>
+          <div style={styles.pageHeader}>
+             <img
+                     src={HomeIcon}
+                   alt="resource icon"
+                     style={styles.resourceEmoji}
+                        onError={(e) => {
+                         e.target.style.display = "none";
+                            }}
+                  />
+            <h2 style={{ margin: 7, fontWeight: 700, color: "#eeeff0" }}> Dashboard</h2>
+          </div>
+          
+          <div style={styles.searchWrapper}>
+            <Search size={18} style={styles.searchIcon} />
+            <input
+              placeholder="Search study materials..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              style={styles.searchBar}
+            />
+          </div>
+        </div>
+
+        {/* HERO CARD - White with Soft Border */}
+        <div style={styles.heroCard}>
+          <div style={styles.heroText}>
+            <div style={styles.badge}>
+              <GraduationCap size={14} style={{ marginRight: '6px' }} />
+              Welcome Back
+            </div>
+            <h1 style={styles.title}>
+              Hello, <span style={styles.name}>{user?.name || "Student"}</span>!
+            </h1>
+            <p style={styles.description}>
+              Track your progress, download latest materials, and chat with your peers.
+            </p>
+          </div>
+          <div style={styles.heroIllustration} />
+        </div>
+
+        {/* STATS SECTION */}
+        <div style={styles.statsGrid}>
+          <div style={styles.statCard}>
+            <div style={{ ...styles.iconBox, backgroundColor: "#eef2ff", color: "#4f46e5" }}>
+              <BookOpen size={24} />
+            </div>
+            <div>
+              <p style={styles.statLabel}>Resources</p>
+              <h3 style={styles.statValue}>{resources.length}</h3>
+            </div>
+          </div>
+          <div style={styles.statCard}>
+            <div style={{ ...styles.iconBox, backgroundColor: "#f0fdf4", color: "#16a34a" }}>
+              <Users size={24} />
+            </div>
+            <div>
+              <p style={styles.statLabel}>Peers Online</p>
+              <h3 style={styles.statValue}>{users.length > 0 ? users.length - 1 : 0}</h3>
+            </div>
+          </div>
+        </div>
+
+        {/* CONTENT GRID */}
+        <h3 style={styles.sectionHeader}>Study Materials</h3>
+        <div style={styles.resourceGrid}>
+          {filteredResources.map((item, index) => (
+            <div key={index} style={styles.resourceCard}>
+              <div style={styles.cardHeader}>
+                   <img
+                     src={bookIcon}
+                   alt="resource icon"
+                     style={styles.resourceEmoji}
+                        onError={(e) => {
+                         e.target.style.display = "none";
+                            }}
+                  />
+                <span style={styles.authorBadge}>{item.uploadedBy || "Faculty"}</span>
+              </div>
+              <h4 style={styles.cardTitle}>{item.title}</h4>
+              <p style={styles.cardDesc}>{item.description}</p>
+              <a href={item.fileUrl} target="_blank" rel="noreferrer" style={styles.primaryBtn}>
+                <ExternalLink size={16} style={{ marginRight: "8px" }} /> Open File
+              </a>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* HERO */}
-      <div style={styles.hero}>
-        <p style={styles.subtitle}>Welcome back {user?.name || ""} 👋</p>
-        <h1 style={styles.title}>Your Knowledge Base</h1>
-        <p style={styles.description}>
-          Organize, access, and share your study resources.
-        </p>
-      </div>
-
-      {/* STATS */}
-      <div style={styles.statsRow}>
-        {[
-          { title: "Total Resources", value: resources.length, icon: "📚" },
-          { title: "Search Results", value: filteredResources.length, icon: "🔍" }
-        ].map((item, index) => (
-          <div key={index} style={styles.statCard}>
-            <div style={styles.statTop}>
-              <div style={styles.statIcon}>{item.icon}</div>
-              <div>
-                <p style={styles.statTitle}>{item.title}</p>
-                <h2>{item.value}</h2>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* RESOURCES */}
-      <div style={styles.grid}>
-        {filteredResources.map((item, index) => (
-          <div
-            key={index}
-            style={{ ...styles.resourceCard, background: "linear-gradient(135deg, #1e3a8a, #1e293b)" }}
-          >
-            <div style={styles.iconBadge}>📘</div>
-            <h3 style={styles.cardTitle}>{item.title}</h3>
-            <p style={styles.cardDesc}>{item.description}</p>
-            <p style={{ color: "#60a5fa" }}>Uploaded by: {item.uploadedBy || "Admin"}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* CHAT BUTTON */}
-      <button
-        style={styles.chatButton}
-        onClick={() => setShowChat(!showChat)}
-      >
-        💬
+      {/* CHAT FAB */}
+      <button style={styles.chatFab} onClick={() => setShowChat(!showChat)}>
+        {showChat ? <X size={28} /> : <MessageCircle size={28} />}
       </button>
 
-      {/* CHAT POPUP */}
+      {/* CHAT WIDGET - Matches Login Card Style */}
       {showChat && (
-        <div style={styles.chatPopup}>
+        <div style={styles.chatWindow}>
           <div style={styles.chatHeader}>
-            <span>Chat</span>
-            <button onClick={() => setShowChat(false)}>✖</button>
+            <h5 style={{ margin: 0, fontWeight: 700 }}>Peer Messenger</h5>
+            <button style={styles.closeBtn} onClick={() => setShowChat(false)}><X size={18}/></button>
           </div>
 
-          {/* USERS */}
           <div style={styles.userList}>
             {users.filter(u => u._id !== (user?._id || user?.id)).map(u => (
-              <div
-                key={u._id}
-                style={{
-                  ...styles.userItem,
-                  background: selectedUser?._id === u._id ? "#1e40af" : "transparent"
-                }}
-                onClick={() => setSelectedUser(u)}
-              >
-                👤 {u.name}
-              </div>
+            <div
+  key={u._id}
+  style={{
+    ...styles.avatar,
+    width: "auto",
+    padding: "0 10px",
+    border: selectedUser?._id === u._id
+      ? "2px solid #4f46e5"
+      : "2px solid transparent",
+    transform: selectedUser?._id === u._id
+      ? "scale(1.05)"
+      : "scale(1)"
+  }}
+  onClick={() => setSelectedUser(u)}
+  title={u.name}
+>
+  <span
+  style={{
+    fontSize: "12px",
+    fontWeight: 600,
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    maxWidth: "120px",
+    display: "inline-block"
+  }}
+>
+  {u.name}
+</span>
+</div>
             ))}
           </div>
 
-          <p style={styles.selectedUserText}>
-            Chatting with: {selectedUser?.name || "Select a user"}
-          </p>
-
-          {/* MESSAGES */}
-          <div style={styles.chatMessages}>
-            {messages.map((msg, i) => (
-              <div
-                key={i}
-                style={{
-                  ...styles.message,
-                  alignSelf:
-                    msg.senderId?.toString() === (user?._id || user?.id)
-                      ? "flex-end"
-                      : "flex-start",
-                  background:
-                    msg.senderId?.toString() === (user?._id || user?.id)
-                      ? "#2563eb"
-                      : "#1e293b"
-                }}
-              >
-                {msg.message}
-              </div>
-            ))}
-          </div>
-
-          {/* INPUT */}
-          <div style={styles.chatInputBox}>
-            <input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              style={styles.chatInput}
-              placeholder="Type message..."
-            />
-            <button style={styles.sendBtn} onClick={sendMessage}>
-              Send
-            </button>
+          <div style={styles.chatBody}>
+            {selectedUser ? (
+              <>
+                <div style={styles.msgContainer}>
+                  {messages.map((msg, i) => {
+                    const isMe = msg.senderId?.toString() === (user?._id || user?.id);
+                    return (
+                      <div key={i} style={{
+                        ...styles.bubble,
+                        alignSelf: isMe ? 'flex-end' : 'flex-start',
+                        backgroundColor: isMe ? '#4f46e5' : '#f1f5f9',
+                        color: isMe ? '#fff' : '#1e293b',
+                        borderRadius: isMe ? '12px 12px 2px 12px' : '12px 12px 12px 2px'
+                      }}>
+                        {msg.message}
+                      </div>
+                    );
+                  })}
+                  <div ref={scrollRef} />
+                </div>
+                <div style={styles.chatInputRow}>
+                  <input
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                    style={styles.inputField}
+                    placeholder="Type here..."
+                  />
+                  <button style={styles.sendButton} onClick={sendMessage}><Send size={16} /></button>
+                </div>
+              </>
+            ) : (
+              <div style={styles.emptyState}>Select a user to chat</div>
+            )}
           </div>
         </div>
       )}
     </div>
   );
 }
-// ─── STYLES ─────────────────────────────────────────────
+
+// ─── ALIGNED STYLES ─────────────────────────────────────
 const styles = {
   page: {
     minHeight: "100vh",
-    padding: "60px 80px",
-    fontFamily: "Poppins, sans-serif",
-    color: "#ffffff",
-    background: `
-      radial-gradient(circle at 20% 20%, #1e40af40 0%, transparent 40%),
-      radial-gradient(circle at 80% 80%, #2563eb30 0%, transparent 40%),
-      #0b1220
-    `
+    backgroundColor: "#f8fafc", // Light slate gray background
+    backgroundImage: `radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                      radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%)`,
+    backgroundAttachment: "fixed",
+    fontFamily: "'Inter', sans-serif",
+    paddingBottom: "80px"
   },
-  chatButton: {
-    position: "fixed",
-    bottom: "30px",
-    right: "30px",
-    width: "60px",
-    height: "60px",
-    borderRadius: "50%",
-    background: "#1e40af",
-    color: "white",
-    fontSize: "24px",
-    border: "none",
-    cursor: "pointer",
+  container: { maxWidth: "1100px", margin: "0 auto", padding: "0 20px" },
+  topRow: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "30px 0" },
+ pageHeader: { display: "flex", alignItems: "center", color: "#fff" },
+  searchWrapper: { position: "relative", width: "300px" },
+  searchIcon: { position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", color: "#94a3b8" },
+  searchBar: {
+    width: "100%",
+    padding: "10px 15px 10px 40px",
+    borderRadius: "0.75rem",
+    border: "1px solid #e2e8f0",
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    outline: "none",
+    fontSize: "0.9rem"
+  },
+  heroCard: {
+    padding: "40px",
+    borderRadius: "1.25rem",
+    backgroundColor: "rgba(255, 255, 255, 0.95)",
+    backdropFilter: "blur(10px)",
+    border: "1px solid rgba(255, 255, 255, 0.3)",
+    marginBottom: "30px",
+    display: "flex",
+    boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.05)"
+  },
+  badge: {
+    display: "inline-flex",
+    alignItems: "center",
+    backgroundColor: "#f1f5f9",
+    color: "#4f46e5",
+    padding: "5px 12px",
+    borderRadius: "99px",
+    fontSize: "12px",
+    fontWeight: "600",
+    marginBottom: "15px"
   },
   
-  chatHeader: { 
-    display: "flex", justifyContent: "space-between", marginBottom: "10px" 
+  title: { fontSize: "32px", fontWeight: "800", color: "#1e293b", margin: 0 },
+  name: { color: "#4f46e5" },
+  description: { color: "#64748b", marginTop: "10px", fontSize: "16px" },
+  
+  statsGrid: { display: "flex", gap: "20px", marginBottom: "40px" },
+  statCard: { 
+    flex: 1, backgroundColor: "#fff", padding: "20px", borderRadius: "1rem", 
+    display: "flex", alignItems: "center", gap: "15px", border: "1px solid #e2e8f0",
+    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.02)"
+  },
+  iconBox: { width: "48px", height: "48px", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center" },
+  statLabel: { margin: 0, fontSize: "13px", color: "#64748b", fontWeight: "500" },
+  statValue: { margin: 0, fontSize: "24px", fontWeight: "700", color: "#1e293b" },
+
+  sectionHeader: { fontSize: "18px", fontWeight: "700", color: "#1e293b", marginBottom: "20px" },
+  resourceGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "20px" },
+  resourceCard: {
+    backgroundColor: "#fff", padding: "25px", borderRadius: "1rem", border: "1px solid #e2e8f0",
+    display: "flex", flexDirection: "column", transition: "all 0.2s ease"
+  },
+  resourceEmoji: {
+  width: "24px",
+  height: "24px",
+  objectFit: "contain"
+},
+
+  cardHeader: { display: "flex", justifyContent: "space-between", marginBottom: "15px" },
+  
+  authorBadge: { fontSize: "10px", fontWeight: "700", color: "#4f46e5", backgroundColor: "#eef2ff", padding: "4px 8px", borderRadius: "6px", textTransform: "uppercase" },
+  cardTitle: { fontSize: "17px", fontWeight: "700", color: "#1e293b", marginBottom: "8px" },
+  cardDesc: { color: "#64748b", fontSize: "14px", marginBottom: "20px", flex: 1 },
+  primaryBtn: {
+    padding: "10px", textAlign: "center", backgroundColor: "#4f46e5", color: "#fff", 
+    borderRadius: "0.5rem", textDecoration: "none", fontWeight: "600", fontSize: "14px",
+    display: "flex", alignItems: "center", justifyContent: "center"
   },
 
- chatPopup: {
-  position: "fixed",
-  bottom: "100px",
-  right: "30px",
-  width: "320px",
-  height: "420px",
-  background: "#0f172a",
-  borderRadius: "20px",
-  padding: "10px",
-  display: "flex",
-  flexDirection: "column",
-  border: "1px solid rgba(255,255,255,0.1)",
-  boxSizing: "border-box"
-},
-
-chatMessages: {
-  flex: 1,
-  overflowY: "auto",
-  background: "#020617",
-  padding: "10px",
-  borderRadius: "10px",
-  marginBottom: "10px",
-  display: "flex",
-  flexDirection: "column",
-  gap: "6px"
-},
-
-message: {
-  padding: "6px 10px",
-  borderRadius: "8px",
-  color: "#ffffff",
-  maxWidth: "80%",
-  wordBreak: "break-word"
-},
-
-chatInputBox: {
-  display: "flex",
-  gap: "5px",
-  marginTop: "5px"
-},
-
-chatInput: {
-  flex: 1,
-  padding: "8px",
-  borderRadius: "8px",
-  border: "none",
-  background: "#1e293b",
-  color: "#ffffff"
-},
-
-sendBtn: {
-  padding: "8px",
-  borderRadius: "8px",
-  background: "#2563eb",
-  color: "#ffffff",
-  border: "none",
-  cursor: "pointer"
-},
-userList: { maxHeight: "120px", overflowY: "auto", marginBottom: "10px" },
-  userItem: { padding: "8px", background: "#1e3a8a", marginBottom: "5px", borderRadius: "8px", cursor: "pointer" },
-  
-  
-
-   navbar: { display: "flex", justifyContent: "space-between", marginBottom: "60px" },
-  logo: { fontSize: "22px", fontWeight: "600" },
-  navRight: { display: "flex", gap: "20px" },
-  search: { padding: "10px 18px", borderRadius: "20px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.05)", color: "white" },
-  logoutBtn: { padding: "8px 18px", borderRadius: "20px", border: "1px solid rgba(255,255,255,0.2)", background: "transparent", color: "white", cursor: "pointer" },
-  hero: { padding: "40px", borderRadius: "20px", background: "rgba(30, 58, 138, 0.25)", marginBottom: "40px" },
-  subtitle: { color: "#60a5fa" },
-  title: { fontSize: "40px" },
-  description: { color: "#94a3b8" },
-  statsRow: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "20px", marginBottom: "40px" },
-  statCard: { background: "rgba(30, 58, 138, 0.2)", padding: "20px", borderRadius: "20px" },
-  statTop: { display: "flex", gap: "15px" },
-  statIcon: { fontSize: "25px" },
-  statTitle: { color: "#94a3b8" },
-  grid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "20px" },
-  resourceCard: { padding: "25px", borderRadius: "20px" },
-  iconBadge: { fontSize: "30px", marginBottom: "10px" },
-  cardTitle: { fontSize: "20px" },
-  cardDesc: { color: "#cbd5e1" },
-  selectedUserText: { color: "#60a5fa", marginBottom: "8px" }
+  chatFab: {
+    position: "fixed", bottom: "30px", right: "30px", width: "60px", height: "60px",
+    borderRadius: "50%", backgroundColor: "#4f46e5", color: "#fff", border: "none", cursor: "pointer",
+    boxShadow: "0 10px 15px -3px rgba(79, 70, 229, 0.4)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center"
+  },
+  chatWindow: {
+    position: "fixed", bottom: "100px", right: "30px", width: "350px", height: "500px",
+    backgroundColor: "#fff", borderRadius: "1.25rem", border: "1px solid #e2e8f0",
+    boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1)", zIndex: 1000, display: "flex", flexDirection: "column", overflow: "hidden"
+  },
+  chatHeader: { padding: "15px 20px", borderBottom: "1px solid #f1f5f9", display: "flex", justifyContent: "space-between", alignItems: "center", backgroundColor: "#f8fafc" },
+  closeBtn: { background: "none", border: "none", cursor: "pointer", color: "#64748b" },
+  userList: { padding: "10px 15px", display: "flex", gap: "10px", overflowX: "auto", borderBottom: "1px solid #f1f5f9" },
+  avatar: { 
+    width: "40px", height: "40px", borderRadius: "50%", backgroundColor: "#f1f5f9", color: "#4f46e5",
+    display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "700", cursor: "pointer", flexShrink: 0, transition: "0.2s"
+  },
+  chatBody: { flex: 1, display: "flex", flexDirection: "column", padding: "15px" },
+  msgContainer: { flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: "10px", paddingBottom: "10px" },
+  bubble: { padding: "8px 14px", fontSize: "14px", maxWidth: "80%" },
+  chatInputRow: { display: "flex", gap: "8px", paddingTop: "10px" },
+  inputField: { flex: 1, padding: "8px 12px", borderRadius: "0.5rem", border: "1px solid #e2e8f0", outline: "none", fontSize: "14px" },
+  sendButton: { backgroundColor: "#4f46e5", color: "#fff", border: "none", borderRadius: "0.5rem", width: "40px", height: "40px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" },
+  emptyState: { flex: 1, display: "flex", alignItems: "center", justifyContent: "center", color: "#94a3b8", fontSize: "14px" }
 };
 
 export default Dashboard;

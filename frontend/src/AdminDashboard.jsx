@@ -2,11 +2,20 @@ import { useState, useEffect } from "react";
 import UploadResource from "./UploadResource";
 import axios from "axios";
 import admin from "./assets/admin.png";
+import socket from "./socket"; // ADD THIS
+
 
 export default function AdminDashboard() {
   const [resources, setResources] = useState([]);
   const [selectedResources, setSelectedResources] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  //  CHAT STATES
+const [messages, setMessages] = useState([]);
+const [input, setInput] = useState("");
+const [selectedUser, setSelectedUser] = useState(null);
+const [showChat, setShowChat] = useState(false);
+const [users, setUsers] = useState([]);
+const [user, setUser] = useState(null);
 
   // FETCH RESOURCES
   const refreshResources = async () => {
@@ -17,6 +26,28 @@ export default function AdminDashboard() {
       console.error(error);
     }
   };
+// 🔹 Fetch logged-in user
+useEffect(() => {
+  const fetchProfile = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.get("http://localhost:5000/api/auth/profile", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setUser(res.data.user);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  fetchProfile();
+}, []);
+
+// 🔹 Fetch all users
+useEffect(() => {
+  axios.get("http://localhost:5000/api/auth/users")
+    .then(res => setUsers(res.data))
+    .catch(err => console.log(err));
+}, []);
 
   useEffect(() => {
     refreshResources();
@@ -42,6 +73,54 @@ export default function AdminDashboard() {
       console.error(error);
     }
   };
+  // 🔥 JOIN SOCKET
+useEffect(() => {
+  const currentUserId = user?._id || user?.id;
+  if (currentUserId) {
+    socket.emit("join_user", currentUserId);
+  }
+}, [user]);
+useEffect(() => {
+  if (!selectedUser || !user) return;
+
+  const currentUserId = user?._id || user?.id;
+
+  axios
+    .get(`http://localhost:5000/api/messages/${currentUserId}/${selectedUser._id}`)
+    .then(res => setMessages(res.data))
+    .catch(err => console.log(err));
+
+}, [selectedUser, user]);
+useEffect(() => {
+  const handleMessage = (data) => {
+    const currentUserId = user?._id || user?.id;
+
+    if (!currentUserId || !selectedUser) return;
+
+    if (
+      data.senderId === selectedUser._id ||
+      data.receiverId === selectedUser._id
+    ) {
+      setMessages(prev => [...prev, data]);
+    }
+  };
+
+  socket.on("receive_message", handleMessage);
+  return () => socket.off("receive_message", handleMessage);
+}, [user, selectedUser]);
+const sendMessage = () => {
+  const currentUserId = user?._id || user?.id;
+
+  if (!currentUserId || !selectedUser?._id || !input.trim()) return;
+
+  socket.emit("send_message", {
+    senderId: currentUserId,
+    receiverId: selectedUser._id,
+    message: input.trim()
+  });
+
+  setInput("");
+};
 
   // DELETE BULK RESOURCES
   const handleBulkDelete = async () => {
@@ -165,10 +244,84 @@ export default function AdminDashboard() {
           </div>
         )}
       </div>
+   {/* ✅ CHAT BUTTON */}
+      <button
+        style={styles.chatButton}
+        onClick={() => setShowChat(!showChat)}
+      >
+        💬
+      </button>
+
+      {/* ✅ CHAT POPUP */}
+      {showChat && (
+        <div style={styles.chatPopup}>
+          <div style={styles.chatHeader}>
+            <span>Chat</span>
+            <button onClick={() => setShowChat(false)}>✖</button>
+          </div>
+
+          {/* USERS */}
+          <div style={styles.userList}>
+            {users
+              .filter(u => u._id !== (user?._id || user?.id))
+              .map(u => (
+                <div
+                  key={u._id}
+                  style={{
+                    ...styles.userItem,
+                    background:
+                      selectedUser?._id === u._id ? "#1e40af" : "transparent"
+                  }}
+                  onClick={() => setSelectedUser(u)}
+                >
+                  👤 {u.name}
+                </div>
+              ))}
+          </div>
+
+          <p style={styles.selectedUserText}>
+            Chatting with: {selectedUser?.name || "Select a user"}
+          </p>
+
+          {/* MESSAGES */}
+          <div style={styles.chatMessages}>
+            {messages.map((msg, i) => (
+              <div
+                key={i}
+                style={{
+                  ...styles.message,
+                  alignSelf:
+                    msg.senderId?.toString() === (user?._id || user?.id)
+                      ? "flex-end"
+                      : "flex-start",
+                  background:
+                    msg.senderId?.toString() === (user?._id || user?.id)
+                      ? "#2563eb"
+                      : "#1e293b"
+                }}
+              >
+                {msg.message}
+              </div>
+            ))}
+          </div>
+
+          {/* INPUT */}
+          <div style={styles.chatInputBox}>
+            <input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              style={styles.chatInput}
+              placeholder="Type message..."
+            />
+            <button style={styles.sendBtn} onClick={sendMessage}>
+              Send
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
-
 // ------------------ RESOURCE CARD ------------------
 function ResourceCard({ resource, selectedResources, handleSelectResource, handleDelete }) {
   const [editId, setEditId] = useState(null);
@@ -292,6 +445,100 @@ const styles = {
     marginBottom: "50px",
     boxShadow: "0 10px 40px rgba(37, 99, 235, 0.15)",
   },
+  chatButton: {
+  position: "fixed",
+  bottom: "30px",
+  right: "30px",
+  width: "60px",
+  height: "60px",
+  borderRadius: "50%",
+  background: "#1e40af",
+  color: "white",
+  fontSize: "24px",
+  border: "none",
+  cursor: "pointer",
+},
+
+chatPopup: {
+  position: "fixed",
+  bottom: "100px",
+  right: "30px",
+  width: "320px",
+  height: "420px",
+  background: "#0f172a",
+  borderRadius: "20px",
+  padding: "10px",
+  display: "flex",
+  flexDirection: "column",
+  border: "1px solid rgba(255,255,255,0.1)",
+},
+
+chatHeader: {
+  display: "flex",
+  justifyContent: "space-between",
+  marginBottom: "10px"
+},
+
+chatMessages: {
+  flex: 1,
+  overflowY: "auto",
+  background: "#020617",
+  padding: "10px",
+  borderRadius: "10px",
+  marginBottom: "10px",
+  display: "flex",
+  flexDirection: "column",
+  gap: "6px"
+},
+
+message: {
+  padding: "6px 10px",
+  borderRadius: "8px",
+  color: "#ffffff",
+  maxWidth: "80%",
+},
+
+chatInputBox: {
+  display: "flex",
+  gap: "5px",
+},
+
+chatInput: {
+  flex: 1,
+  padding: "8px",
+  borderRadius: "8px",
+  border: "none",
+  background: "#1e293b",
+  color: "#fff"
+},
+
+sendBtn: {
+  padding: "8px",
+  borderRadius: "8px",
+  background: "#2563eb",
+  color: "#fff",
+  border: "none",
+  cursor: "pointer"
+},
+
+userList: {
+  maxHeight: "120px",
+  overflowY: "auto",
+  marginBottom: "10px"
+},
+
+userItem: {
+  padding: "8px",
+  background: "#1e3a8a",
+  marginBottom: "5px",
+  borderRadius: "8px",
+  cursor: "pointer"
+},
+
+selectedUserText: {
+  color: "#60a5fa",
+  marginBottom: "8px"
+},
   subtitle: { color: "#60a5fa", opacity: 0.85, marginBottom: "10px" },
   title: { fontSize: "44px", letterSpacing: "-0.5px", marginBottom: "15px", fontWeight: "700" },
   description: { color: "#94a3b8", maxWidth: "600px" },
@@ -307,8 +554,8 @@ const styles = {
   grid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "30px" },
   card: { background: "linear-gradient(135deg, #1e3a8a, #1e293b)", padding: "35px", borderRadius: "22px", border: "1px solid rgba(255,255,255,0.08)", transition: "all 0.3s ease", position: "relative" },
   iconBadge: { width: "55px", height: "55px", borderRadius: "16px", background: "#2563eb", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "24px", marginBottom: "20px", boxShadow: "0 8px 20px rgba(0,0,0,0.3)" },
-  title: { fontSize: "20px", marginBottom: "10px", color: "white" },
-  desc: { color: "#cbd5e1", marginBottom: "15px" },
+  // title: { fontSize: "20px", marginBottom: "10px", color: "white" },
+  // desc: { color: "#cbd5e1", marginBottom: "15px" },
   subject: { color: "#94a3b8", marginBottom: "25px" },
   openBtn: { display: "block", width: "100%", textAlign: "center", padding: "10px 22px", borderRadius: "12px", textDecoration: "none", background: "linear-gradient(135deg, #3b82f6, #2563eb)", color: "white", fontWeight: "600", boxShadow: "0 6px 18px rgba(245,158,11,0.4)", transition: "0.3s" },
   buttonRow: { marginTop: "25px", display: "flex", gap: "15px" },
@@ -316,5 +563,5 @@ const styles = {
   deleteBtn: { flex: 1, padding: "10px 0", borderRadius: "12px", border: "none", cursor: "pointer", fontWeight: "600", color: "white", background: "linear-gradient(135deg, #ef4444, #dc2626)", boxShadow: "0 6px 18px rgba(239,68,68,0.4)", transition: "all 0.2s ease" },
   saveBtn: { marginTop: "15px", width: "100%", padding: "12px", borderRadius: "12px", border: "none", cursor: "pointer", fontWeight: "600", color: "white", background: "linear-gradient(135deg, #10b981, #059669)", boxShadow: "0 6px 18px rgba(245,158,11,0.35)", transition: "all 0.2s ease" },
   input: { width: "100%", padding: "10px 12px", marginBottom: "12px", borderRadius: "10px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.05)", color: "white", outline: "none", fontSize: "14px" },
-  emptyState: { textAlign: "center", padding: "60px", background: "rgba(30, 58, 138, 0.2)", borderRadius: "20px", border: "1px solid rgba(255,255,255,0.08)", color: "#94a3b8" },
+  emptyState: { textAlign: "center", padding: "60px", background: "rgba(30, 58, 138, 0.2)", borderRadius: "20px", border: "1px solid rgba(255,255,255,0.08)", color: "#94a3b8" }
 };
