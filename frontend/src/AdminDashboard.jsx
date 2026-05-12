@@ -1,8 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import UploadResource from "./UploadResource";
 import axios from "axios";
 import admin from "./assets/admin.png";
 import socket from "./socket"; // ADD THIS
+import { 
+  Search, BookOpen, Users, Send, X, 
+  MessageCircle, ExternalLink, GraduationCap, Layout 
+} from "lucide-react";
+import Navbar from './admin_navbar';
+
 
 
 export default function AdminDashboard() {
@@ -16,6 +22,8 @@ const [selectedUser, setSelectedUser] = useState(null);
 const [showChat, setShowChat] = useState(false);
 const [users, setUsers] = useState([]);
 const [user, setUser] = useState(null);
+
+ const scrollRef = useRef(null);
 
   // FETCH RESOURCES
   const refreshResources = async () => {
@@ -141,427 +149,676 @@ const sendMessage = () => {
     (r.title || "").toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+
+
   return (
     <div style={styles.page}>
-      {/* NAVBAR */}
-      <div style={styles.navbar}>
-        <div style={styles.logo}>
-          <img src={admin} alt="admin" style={{ width: "70px", marginRight: "10px" }} />
-          Admin Panel
+      <Navbar /> {/* Ensure Navbar is consistent */}
+
+      <div style={styles.container}>
+        {/* HEADER AREA */}
+        <div style={styles.topRow}>
+          <div style={styles.pageHeader}>
+            <img src={admin} alt="admin" style={{ width: "40px", marginRight: "12px" }} />
+            <h2 style={{ margin: 0, fontWeight: 700, color: "#eeeff0" }}>Admin Panel</h2>
+          </div>
+          
+          <input
+  placeholder="Search resources..."
+  style={styles.searchBar}
+  value={searchQuery}
+  onChange={(e) => setSearchQuery(e.target.value)}
+
+  onFocus={(e) => {
+    e.target.style.border = "1px solid #4f46e5";
+    e.target.style.boxShadow = "0 0 0 3px rgba(79,70,229,0.15)";
+  }}
+
+  onBlur={(e) => {
+    e.target.style.border = "1px solid #e2e8f0";
+    e.target.style.boxShadow = "none";
+  }}
+/>
         </div>
-      </div>
 
-      {/* HERO */}
-      <div style={styles.hero}>
-        <p style={styles.subtitle}>Administrator Access</p>
-        <h1 style={styles.title}>Manage Platform Resources</h1>
-        <p style={styles.description}>
-          Upload, organize and control all learning materials from one place.
-        </p>
-      </div>
-
-      {/* STATS */}
-      <div style={styles.statsRow}>
-        <div style={styles.statCard}>
-          <div style={styles.statTop}>
-            <div style={{ ...styles.statIcon, background: "#1e40af" }}>📚</div>
-            <div>
-              <p style={styles.statTitle}>Total Resources</p>
-              <h2>{resources.length}</h2>
+        {/* HERO CARD - Aligned with Student Dashboard */}
+        <div
+          style={styles.heroCard}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-6px) scale(1.01)";
+            e.currentTarget.style.boxShadow = "0 20px 40px -10px rgba(0,0,0,0.15)";
+            e.currentTarget.style.border = "1px solid #4f46e5";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "translateY(0) scale(1)";
+            e.currentTarget.style.boxShadow = "0 10px 25px -5px rgba(0,0,0,0.05)";
+            e.currentTarget.style.border = "1px solid rgba(255,255,255,0.3)";
+          }}
+        >
+          <div style={styles.heroText}>
+            <div style={styles.badge}>
+              <Layout size={14} style={{ marginRight: '6px' }} />
+              Management Console
             </div>
+            <h1 style={styles.title}>Platform Resources</h1>
+            <p style={styles.description}>
+              Control the flow of learning materials, manage peer interactions, and track system growth.
+            </p>
           </div>
+          <div style={styles.heroIllustration} />
         </div>
 
-        <div style={styles.statCard}>
-          <div style={styles.statTop}>
-            <div style={{ ...styles.statIcon, background: "#059669" }}>⬆️</div>
-            <div>
-              <p style={styles.statTitle}>Recent Uploads</p>
-              <h2>
-                {resources.filter(
-                  (r) =>
-                    new Date(r.createdAt) >
-                    new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-                ).length}
-              </h2>
-            </div>
-          </div>
+        {/* STATS SECTION */}
+       <div style={styles.statsGrid}>
+  <div
+    style={styles.statCard}
+    onMouseEnter={(e) => {
+      e.currentTarget.style.backgroundColor = "#eff6ff";
+      e.currentTarget.style.border = "1px solid #3b82f6";
+      e.currentTarget.style.transition = "0.3s";
+    }}
+    onMouseLeave={(e) => {
+      e.currentTarget.style.backgroundColor = "#fff";
+      e.currentTarget.style.border = "1px solid #e5e7eb";
+    }}
+  >
+    <div
+      style={{
+        ...styles.iconBox,
+        backgroundColor: "#eef2ff",
+        color: "#4f46e5",
+      }}
+    >
+      <BookOpen size={24} />
+    </div>
+
+    <div>
+      <p style={styles.statLabel}>Total Library</p>
+      <h3 style={styles.statValue}>{resources.length}</h3>
+    </div>
+  </div>
+
+  <div
+    style={styles.statCard}
+    onMouseEnter={(e) => {
+      e.currentTarget.style.backgroundColor = "#eff6ff";
+      e.currentTarget.style.border = "1px solid #3b82f6";
+      e.currentTarget.style.transition = "0.3s";
+    }}
+    onMouseLeave={(e) => {
+      e.currentTarget.style.backgroundColor = "#fff";
+      e.currentTarget.style.border = "1px solid #e5e7eb";
+    }}
+  >
+    <div
+      style={{
+        ...styles.iconBox,
+        backgroundColor: "#f0fdf4",
+        color: "#16a34a",
+      }}
+    >
+      <GraduationCap size={24} />
+    </div>
+
+    <div>
+      <p style={styles.statLabel}>Recent Uploads</p>
+      <h3 style={styles.statValue}>
+        {
+          resources.filter(
+            (r) =>
+              new Date(r.createdAt) >
+              new Date(Date.now() - 7 * 86400000)
+          ).length
+        }
+      </h3>
+    </div>
+  </div>
+          {selectedResources.length > 0 && (
+             <div style={{...styles.statCard, border: '1px solid #fee2e2', backgroundColor: '#fef2f2'}} onClick={handleBulkDelete}>
+                <div style={{ ...styles.iconBox, backgroundColor: "#ef4444", color: "#fff" }}>
+                  <X size={24} />
+                </div>
+                <div>
+                  <p style={{...styles.statLabel, color: '#b91c1c'}}>Delete Selected</p>
+                  <h3 style={{...styles.statValue, color: '#b91c1c'}}>{selectedResources.length}</h3>
+                </div>
+             </div>
+          )}
         </div>
 
-        <div style={styles.statCard}>
-          <div style={styles.statTop}>
-            <div style={{ ...styles.statIcon, background: "#f59e0b" }}>💾</div>
-            <div>
-              <p style={styles.statTitle}>Selected</p>
-              <h2>{selectedResources.length}</h2>
-            </div>
-          </div>
+        {/* UPLOAD BOX */}
+        <div style={styles.uploadSection}>
+            <h3 style={styles.sectionHeader}>Add New Material</h3>
+            <UploadResource refreshResources={refreshResources} />
+        </div>
+
+        {/* CONTENT GRID */}
+        <h3 style={styles.sectionHeader}>Material Management</h3>
+        <div style={styles.resourceGrid}>
+          {filteredResources.map((r) => (
+            <AdminResourceCard
+              key={r._id}
+              resource={r}
+              selectedResources={selectedResources}
+              handleSelectResource={handleSelectResource}
+              handleDelete={handleDelete}
+            />
+          ))}
         </div>
       </div>
 
-      {/* UPLOAD SECTION */}
-      <div style={styles.section}>
-        <h2 style={styles.sectionTitle}>Upload New Resource</h2>
-        <UploadResource refreshResources={refreshResources} />
-      </div>
+      {/* ... Chat logic ... */}
+      {/* CHAT FAB */}
 
-      {/* SEARCH + BULK DELETE */}
-      <div style={{ marginBottom: "20px", display: "flex", gap: "15px", alignItems: "center" }}>
-        <input
-          type="text"
-          placeholder="Search resources..."
-          style={styles.searchInput}
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        {selectedResources.length > 0 && (
-          <button style={styles.bulkDeleteBtn} onClick={handleBulkDelete}>
-            🗑 Delete Selected ({selectedResources.length})
-          </button>
-        )}
-      </div>
+      <button style={styles.chatFab} onClick={() => setShowChat(!showChat)}>
 
-      {/* VIEW RESOURCES */}
-      <div style={styles.section}>
-        <h2 style={styles.sectionTitle}>All Resources</h2>
-        {filteredResources.length === 0 ? (
-          <div style={styles.emptyState}>
-            <h3>No Resources Found 📭</h3>
-          </div>
-        ) : (
-          <div style={styles.grid}>
-            {filteredResources.map((r) => (
-              <ResourceCard
-                key={r._id}
-                resource={r}
-                editId={null}
-                setResources={setResources}
-                selectedResources={selectedResources}
-                handleSelectResource={handleSelectResource}
-                handleDelete={handleDelete}
-              />
-            ))}
-          </div>
-        )}
-      </div>
-   {/* ✅ CHAT BUTTON */}
-      <button
-        style={styles.chatButton}
-        onClick={() => setShowChat(!showChat)}
-      >
-        💬
+        {showChat ? <X size={28} /> : <MessageCircle size={28} />}
+
       </button>
 
-      {/* ✅ CHAT POPUP */}
+
+
+      {/* CHAT WIDGET - Matches Login Card Style */}
+
       {showChat && (
-        <div style={styles.chatPopup}>
+
+        <div style={styles.chatWindow}>
+
           <div style={styles.chatHeader}>
-            <span>Chat</span>
-            <button onClick={() => setShowChat(false)}>✖</button>
+
+            <h5 style={{ margin: 0, fontWeight: 700 }}>Peer Messenger</h5>
+
+            <button style={styles.closeBtn} onClick={() => setShowChat(false)}><X size={18}/></button>
+
           </div>
 
-          {/* USERS */}
+
+
           <div style={styles.userList}>
-            {users
-              .filter(u => u._id !== (user?._id || user?.id))
-              .map(u => (
-                <div
-                  key={u._id}
-                  style={{
-                    ...styles.userItem,
-                    background:
-                      selectedUser?._id === u._id ? "#1e40af" : "transparent"
-                  }}
-                  onClick={() => setSelectedUser(u)}
-                >
-                  👤 {u.name}
-                </div>
-              ))}
-          </div>
 
-          <p style={styles.selectedUserText}>
-            Chatting with: {selectedUser?.name || "Select a user"}
-          </p>
+            {users.filter(u => u._id !== (user?._id || user?.id)).map(u => (
 
-          {/* MESSAGES */}
-          <div style={styles.chatMessages}>
-            {messages.map((msg, i) => (
-              <div
-                key={i}
-                style={{
-                  ...styles.message,
-                  alignSelf:
-                    msg.senderId?.toString() === (user?._id || user?.id)
-                      ? "flex-end"
-                      : "flex-start",
-                  background:
-                    msg.senderId?.toString() === (user?._id || user?.id)
-                      ? "#2563eb"
-                      : "#1e293b"
-                }}
-              >
-                {msg.message}
-              </div>
+            <div
+
+  key={u._id}
+
+  style={{
+
+    ...styles.avatar,
+
+    width: "auto",
+
+    padding: "0 10px",
+
+    border: selectedUser?._id === u._id
+
+      ? "2px solid #4f46e5"
+
+      : "2px solid transparent",
+
+    transform: selectedUser?._id === u._id
+
+      ? "scale(1.05)"
+
+      : "scale(1)"
+
+  }}
+
+  onClick={() => setSelectedUser(u)}
+
+  title={u.name}
+
+>
+
+  <span
+
+  style={{
+
+    fontSize: "12px",
+
+    fontWeight: 600,
+
+    whiteSpace: "nowrap",
+
+    overflow: "hidden",
+
+    textOverflow: "ellipsis",
+
+    maxWidth: "120px",
+
+    display: "inline-block"
+
+  }}
+
+>
+
+  {u.name}
+
+</span>
+
+</div>
+
             ))}
+
           </div>
 
-          {/* INPUT */}
-          <div style={styles.chatInputBox}>
-            <input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              style={styles.chatInput}
-              placeholder="Type message..."
-            />
-            <button style={styles.sendBtn} onClick={sendMessage}>
-              Send
-            </button>
+
+
+          <div style={styles.chatBody}>
+
+            {selectedUser ? (
+
+              <>
+
+                <div style={styles.msgContainer}>
+
+                  {messages.map((msg, i) => {
+
+                    const isMe = msg.senderId?.toString() === (user?._id || user?.id);
+
+                    return (
+
+                      <div key={i} style={{
+
+                        ...styles.bubble,
+
+                        alignSelf: isMe ? 'flex-end' : 'flex-start',
+
+                        backgroundColor: isMe ? '#4f46e5' : '#f1f5f9',
+
+                        color: isMe ? '#fff' : '#1e293b',
+
+                        borderRadius: isMe ? '12px 12px 2px 12px' : '12px 12px 12px 2px'
+
+                      }}>
+
+                        {msg.message}
+
+                      </div>
+
+                    );
+
+                  })}
+
+                  <div ref={scrollRef} />
+
+                </div>
+
+                <div style={styles.chatInputRow}>
+
+                  <input
+
+                    value={input}
+
+                    onChange={(e) => setInput(e.target.value)}
+
+                    onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+
+                    style={styles.inputField}
+
+                    placeholder="Type here..."
+
+                  />
+
+                  <button style={styles.sendButton} onClick={sendMessage}><Send size={16} /></button>
+
+                </div>
+
+              </>
+
+            ) : (
+
+              <div style={styles.emptyState}>Select a user to chat</div>
+
+            )}
+
           </div>
+
         </div>
+
       )}
+
     </div>
+
   );
+
 }
-// ------------------ RESOURCE CARD ------------------
-function ResourceCard({ resource, selectedResources, handleSelectResource, handleDelete }) {
-  const [editId, setEditId] = useState(null);
+
+
+
+function AdminResourceCard({
+  resource,
+  selectedResources,
+  handleSelectResource,
+  handleDelete
+}) {
+
+  const isSelected = selectedResources.includes(resource._id);
+
+  const [isEditing, setIsEditing] = useState(false);
+
   const [formData, setFormData] = useState({
-    title: resource.title,
-    description: resource.description,
-    subject: resource.subject,
+    title: resource.title || "",
+    description: resource.description || "",
+    subject: resource.subject || ""
   });
 
-  const handleEdit = () => setEditId(resource._id);
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
+
   const handleUpdate = async () => {
     try {
-      const res = await axios.put(
+
+      await axios.put(
         `http://localhost:5000/api/resources/${resource._id}`,
         formData
       );
-      // Update resource in page
-      window.location.reload(); // optional, can improve later
+
+      alert("Resource updated successfully");
+
+      setIsEditing(false);
+
+      window.location.reload();
+
     } catch (err) {
       console.error(err);
     }
   };
 
   return (
-    <div
-      style={{
-        ...styles.card,
-        border: selectedResources.includes(resource._id)
-          ? "2px solid #10b981"
-          : styles.card.border,
-      }}
-    >
+   
+  <div
+    style={{
+      ...styles.resourceCard,
+      border: isSelected
+        ? "2px solid #e54646"
+        : "1px solid #4f46e5",
+      position: "relative"
+    }}
+    onMouseEnter={(e) => {
+      e.currentTarget.style.transform = "translateY(-8px)";
+      e.currentTarget.style.boxShadow =
+        "0 18px 35px rgba(79,70,229,0.18)";
+      e.currentTarget.style.border =
+        isSelected
+          ? "2px solid #e54646"
+          : "1px solid #2563eb";
+    }}
+    onMouseLeave={(e) => {
+      e.currentTarget.style.transform = "translateY(0)";
+      e.currentTarget.style.boxShadow = "none";
+      e.currentTarget.style.border =
+        isSelected
+          ? "2px solid #e54646"
+          : "1px solid #4f46e5";
+    }}
+  >
+
       <input
         type="checkbox"
-        checked={selectedResources.includes(resource._id)}
+        checked={isSelected}
         onChange={() => handleSelectResource(resource._id)}
-        style={{ position: "absolute", top: "15px", right: "15px" }}
+        style={styles.checkbox}
       />
 
-      {/* PREVIEW */}
-      {resource.fileType?.startsWith("image") && (
-        <img
-          src={resource.fileUrl}
-          alt={resource.title}
-          style={{ width: "100%", borderRadius: "12px", marginBottom: "15px" }}
-        />
-      )}
+      <div style={styles.cardHeader}>
+        <div style={styles.authorBadge}>
+          {resource.subject || "General"}
+        </div>
+      </div>
 
-      <div style={styles.iconBadge}>📘</div>
-
-      {editId === resource._id ? (
+      {isEditing ? (
         <>
+
           <input
+            type="text"
             value={formData.title}
-            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                title: e.target.value
+              })
+            }
+            placeholder="Title"
             style={styles.input}
           />
-          <input
+
+          <textarea
             value={formData.description}
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            style={styles.input}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                description: e.target.value
+              })
+            }
+            placeholder="Description"
+            style={styles.textarea}
           />
+
           <input
+            type="text"
             value={formData.subject}
-            onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                subject: e.target.value
+              })
+            }
+            placeholder="Subject"
             style={styles.input}
           />
-          <button style={styles.saveBtn} onClick={handleUpdate}>
-            💾 Save Changes
+
+          <button
+            style={styles.saveBtn}
+            onClick={handleUpdate}
+          >
+             Save Changes
           </button>
+
         </>
       ) : (
         <>
-          <h3 style={styles.title}>{resource.title}</h3>
-          <p style={styles.desc}>{resource.description}</p>
-          <p style={styles.subject}>
-            <span style={{ color: "#60a5fa" }}>Subject:</span> {resource.subject}
+
+          <h4 style={styles.cardTitle}>
+            {resource.title}
+          </h4>
+
+          <p style={styles.cardDesc}>
+            {resource.description}
           </p>
-          <a href={resource.fileUrl} target="_blank" rel="noreferrer" style={styles.openBtn}>
-            Open Resource
-          </a>
+
+          <p style={styles.subjectText}>
+            <span style={{ color: "#4f46e5" }}>
+              Subject:
+            </span>{" "}
+            {resource.subject}
+          </p>
+
           <div style={styles.buttonRow}>
-            <button style={styles.editBtn} onClick={handleEdit}>
-              ✏️ Update
+
+            <button
+              style={styles.editBtn}
+              onClick={handleEdit}
+            >
+              Update
             </button>
-            <button style={styles.deleteBtn} onClick={() => handleDelete(resource._id)}>
-              🗑 Delete
+
+            <button
+              onClick={() => handleDelete(resource._id)}
+              style={styles.dangerBtn}
+            >
+              Delete
             </button>
+
+            <a
+              href={resource.fileUrl}
+              target="_blank"
+              rel="noreferrer"
+              style={styles.secondaryBtn}
+            >
+              View
+            </a>
+
           </div>
+
         </>
       )}
+
     </div>
   );
 }
-
-// ------------------ STYLES ------------------
+// ------------------ ALIGNED STYLES ------------------
 const styles = {
+  // Global & Layout
   page: {
     minHeight: "100vh",
-    padding: "60px 80px",
-    fontFamily: "Poppins, sans-serif",
-    color: "#ffffff",
-    background: `
-      radial-gradient(circle at 20% 20%, #1e40af40 0%, transparent 40%),
-      radial-gradient(circle at 80% 80%, #2563eb30 0%, transparent 40%),
-      linear-gradient(270deg, #1e3a8a, #1e293b, #0f172a)
-    `,
-    backgroundSize: "400% 400%",
-    animation: "gradientMove 18s ease infinite",
-    maxWidth: "100%",
-    margin: "0 auto",
+    backgroundColor: "#f8fafc",
+    backgroundImage: `radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                      radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%)`,
+    backgroundAttachment: "fixed",
+    fontFamily: "'Inter', sans-serif",
+    paddingBottom: "80px"
   },
-  navbar: { display: "flex", justifyContent: "space-between", marginBottom: "50px" },
-  logo: { fontSize: "22px", fontWeight: "600" },
-  hero: {
-    background: "rgba(30, 58, 138, 0.25)",
-    backdropFilter: "blur(20px)",
-    padding: "50px",
-    borderRadius: "20px",
-    border: "1px solid rgba(255,255,255,0.08)",
-    marginBottom: "50px",
-    boxShadow: "0 10px 40px rgba(37, 99, 235, 0.15)",
-  },
-  chatButton: {
-  position: "fixed",
-  bottom: "30px",
-  right: "30px",
-  width: "60px",
-  height: "60px",
-  borderRadius: "50%",
-  background: "#1e40af",
-  color: "white",
-  fontSize: "24px",
-  border: "none",
-  cursor: "pointer",
+  container: { maxWidth: "1100px", margin: "0 auto", padding: "0 20px" },
+  topRow: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "30px 0" },
+  pageHeader: { display: "flex", alignItems: "center", color: "#fff" },
+  
+  // Search
+  searchWrapper: { position: "relative", width: "300px" },
+  searchIcon: { position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", color: "#94a3b8", zIndex: 1 },
+ 
+searchBar: {
+  width: "30%",
+  padding: "10px 15px 10px 40px",
+  borderRadius: "0.75rem",
+  border: "1px solid #e2e8f0",
+  backgroundColor: "rgba(255, 255, 255, 0.9)",
+  outline: "none",
+  fontSize: "0.9rem",
+  transition: "all 0.25s ease"
 },
 
-chatPopup: {
-  position: "fixed",
-  bottom: "100px",
-  right: "30px",
-  width: "320px",
-  height: "420px",
-  background: "#0f172a",
-  borderRadius: "20px",
-  padding: "10px",
+  // Hero Card
+  heroCard: {
+    padding: "40px", borderRadius: "1.25rem", backgroundColor: "rgba(255, 255, 255, 0.95)",
+    backdropFilter: "blur(10px)", border: "1px solid rgba(255,255,255,0.3)", marginBottom: "30px",
+    display: "flex", justifyContent: "space-between", alignItems: "center", transition: "all 0.3s ease"
+  },
+  badge: {
+    display: "inline-flex", alignItems: "center", backgroundColor: "#f1f5f9", color: "#4f46e5",
+    padding: "5px 12px", borderRadius: "99px", fontSize: "12px", fontWeight: "600", marginBottom: "15px"
+  },
+  title: { fontSize: "32px", fontWeight: "800", color: "#1e293b", margin: 0 },
+  description: { color: "#64748b", marginTop: "10px", fontSize: "16px" },
+  heroIllustration: { width: "120px", height: "120px", borderRadius: "50%", background: "linear-gradient(135deg, #4f46e5, #6366f1)", opacity: 0.1 },
+
+  // Stats
+  statsGrid: { display: "flex", gap: "20px", marginBottom: "40px" },
+  statCard: { 
+    flex: 1, backgroundColor: "#fff", padding: "20px", borderRadius: "1rem", 
+    display: "flex", alignItems: "center", gap: "15px", border: "1px solid #e2e8f0", transition: "0.25s"
+  },
+  iconBox: { width: "48px", height: "48px", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center" },
+  statLabel: { margin: 0, fontSize: "13px", fontWeight: "500", color: "#64748b" },
+  statValue: { margin: 0, fontSize: "24px", fontWeight: "700", color: "#1e293b" },
+
+  // Content
+  sectionHeader: { fontSize: "18px", fontWeight: "700", color: "#000", marginBottom: "20px" },
+  uploadSection: { 
+    backgroundColor: "rgba(255,255,255,0.05)", padding: "25px", borderRadius: "1.25rem", 
+    border: "1px solid rgba(255,255,255,0.1)", marginBottom: "40px" 
+  },
+  resourceGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "20px" },
+  resourceCard: {
+  backgroundColor: "#fff",
+  padding: "25px",
+  borderRadius: "1rem",
   display: "flex",
   flexDirection: "column",
-  border: "1px solid rgba(255,255,255,0.1)",
+  transition: "all 0.3s ease",
+  cursor: "pointer"
 },
+  cardHeader: { display: "flex", justifyContent: "space-between", marginBottom: "15px" },
+  authorBadge: { fontSize: "10px", fontWeight: "700", color: "#4f46e5", backgroundColor: "#eef2ff", padding: "4px 8px", borderRadius: "6px" },
+  cardTitle: { fontSize: "17px", fontWeight: "700", color: "#1e293b", marginBottom: "8px" },
+  cardDesc: { color: "#64748b", fontSize: "14px", marginBottom: "20px", flex: 1 },
+  checkbox: { position: 'absolute', top: '15px', right: '15px', cursor: 'pointer' },
 
-chatHeader: {
-  display: "flex",
-  justifyContent: "space-between",
-  marginBottom: "10px"
-},
+  // Buttons
+  dangerBtn: { 
+    flex: 1, padding: "10px", backgroundColor: "#fee2e2", color: "#dc2626", 
+    border: "none", borderRadius: "0.5rem", fontWeight: "600", cursor: "pointer" 
+  },
+  secondaryBtn: { 
+    flex: 1, padding: "10px", backgroundColor: "#f1f5f9", color: "#475569", 
+    borderRadius: "0.5rem", textDecoration: "none", fontWeight: "600", textAlign: 'center', fontSize: '14px' 
+  },
 
-chatMessages: {
+  // Chat (Matches Ref 1)
+  chatFab: { position: "fixed", bottom: "30px", right: "30px", width: "60px", height: "60px", borderRadius: "50%", backgroundColor: "#4f46e5", color: "#fff", border: "none", boxShadow: "0 10px 15px -3px rgba(79, 70, 229, 0.4)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 },
+  chatWindow: { position: "fixed", bottom: "100px", right: "30px", width: "350px", height: "500px", backgroundColor: "#fff", borderRadius: "1.25rem", border: "1px solid #e2e8f0", boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1)", zIndex: 1000, display: "flex", flexDirection: "column", overflow: "hidden" },
+  chatHeader: { padding: "15px 20px", borderBottom: "1px solid #f1f5f9", display: "flex", justifyContent: "space-between", alignItems: "center", backgroundColor: "#f8fafc" },
+  userList: { padding: "10px 15px", display: "flex", gap: "10px", overflowX: "auto", borderBottom: "1px solid #f1f5f9" },
+  avatar: { padding: "0 10px", borderRadius: "12px", backgroundColor: "#f1f5f9", color: "#4f46e5", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "700", cursor: "pointer" },
+  chatBody: { flex: 1, display: "flex", flexDirection: "column", padding: "15px" },
+  msgContainer: { flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: "10px" },
+  bubble: { padding: "8px 14px", fontSize: "14px", maxWidth: "80%" },
+  chatInputRow: { display: "flex", gap: "8px", paddingTop: "10px" },
+  inputField: { flex: 1, padding: "8px 12px", borderRadius: "0.5rem", border: "1px solid #e2e8f0", outline: "none" },
+  sendButton: { backgroundColor: "#4f46e5", color: "#fff", border: "none", borderRadius: "0.5rem", width: "40px", height: "40px" },
+  editBtn: {
   flex: 1,
-  overflowY: "auto",
-  background: "#020617",
   padding: "10px",
-  borderRadius: "10px",
-  marginBottom: "10px",
-  display: "flex",
-  flexDirection: "column",
-  gap: "6px"
-},
-
-message: {
-  padding: "6px 10px",
-  borderRadius: "8px",
-  color: "#ffffff",
-  maxWidth: "80%",
-},
-
-chatInputBox: {
-  display: "flex",
-  gap: "5px",
-},
-
-chatInput: {
-  flex: 1,
-  padding: "8px",
-  borderRadius: "8px",
-  border: "none",
-  background: "#1e293b",
-  color: "#fff"
-},
-
-sendBtn: {
-  padding: "8px",
-  borderRadius: "8px",
-  background: "#2563eb",
+  backgroundColor: "#4f46e5",
   color: "#fff",
   border: "none",
+  borderRadius: "0.5rem",
+  fontWeight: "600",
   cursor: "pointer"
 },
 
-userList: {
-  maxHeight: "120px",
-  overflowY: "auto",
-  marginBottom: "10px"
+saveBtn: {
+  width: "100%",
+  padding: "12px",
+  backgroundColor: "#16a34a",
+  color: "#fff",
+  border: "none",
+  borderRadius: "0.5rem",
+  fontWeight: "700",
+  cursor: "pointer",
+  marginTop: "10px"
 },
 
-userItem: {
-  padding: "8px",
-  background: "#1e3a8a",
-  marginBottom: "5px",
-  borderRadius: "8px",
-  cursor: "pointer"
+buttonRow: {
+  display: "flex",
+  gap: "8px",
+  marginTop: "15px"
 },
 
-selectedUserText: {
-  color: "#60a5fa",
-  marginBottom: "8px"
+input: {
+  width: "100%",
+  padding: "10px",
+  borderRadius: "0.5rem",
+  border: "1px solid #cbd5e1",
+  marginBottom: "10px",
+  outline: "none"
 },
-  subtitle: { color: "#60a5fa", opacity: 0.85, marginBottom: "10px" },
-  title: { fontSize: "44px", letterSpacing: "-0.5px", marginBottom: "15px", fontWeight: "700" },
-  description: { color: "#94a3b8", maxWidth: "600px" },
-  statsRow: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "25px", marginBottom: "60px" },
-  statCard: { background: "rgba(255,255,255,0.05)", padding: "35px", borderRadius: "20px", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(20px)", transition: "0.3s", cursor: "pointer", textAlign: "center", boxShadow: "0 8px 40px rgba(0,0,0,0.4)" },
-  statTop: { display: "flex", alignItems: "center", gap: "18px" },
-  statIcon: { width: "55px", height: "55px", borderRadius: "16px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "24px" },
-  statTitle: { color: "#94a3b8", marginBottom: "8px" },
-  section: { background: "rgba(30, 58, 138, 0.15)", padding: "40px", borderRadius: "20px", border: "1px solid rgba(255,255,255,0.08)", marginBottom: "50px", boxShadow: "0 10px 40px rgba(0,0,0,0.3)" },
-  sectionTitle: { marginBottom: "25px" },
-  searchInput: { width: "100%", padding: "12px 20px", borderRadius: "12px", border: "1px solid #94a3b8", outline: "none", fontSize: "16px", background: "rgba(255,255,255,0.05)", color: "#fff", backdropFilter: "blur(10px)" },
-  bulkDeleteBtn: { padding: "10px 20px", borderRadius: "12px", border: "none", cursor: "pointer", fontWeight: "600", background: "linear-gradient(135deg, #ef4444, #dc2626)", color: "white" },
-  grid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "30px" },
-  card: { background: "linear-gradient(135deg, #1e3a8a, #1e293b)", padding: "35px", borderRadius: "22px", border: "1px solid rgba(255,255,255,0.08)", transition: "all 0.3s ease", position: "relative" },
-  iconBadge: { width: "55px", height: "55px", borderRadius: "16px", background: "#2563eb", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "24px", marginBottom: "20px", boxShadow: "0 8px 20px rgba(0,0,0,0.3)" },
-  // title: { fontSize: "20px", marginBottom: "10px", color: "white" },
-  // desc: { color: "#cbd5e1", marginBottom: "15px" },
-  subject: { color: "#94a3b8", marginBottom: "25px" },
-  openBtn: { display: "block", width: "100%", textAlign: "center", padding: "10px 22px", borderRadius: "12px", textDecoration: "none", background: "linear-gradient(135deg, #3b82f6, #2563eb)", color: "white", fontWeight: "600", boxShadow: "0 6px 18px rgba(245,158,11,0.4)", transition: "0.3s" },
-  buttonRow: { marginTop: "25px", display: "flex", gap: "15px" },
-  editBtn: { flex: 1, padding: "10px 0", borderRadius: "12px", border: "none", cursor: "pointer", fontWeight: "600", color: "white", background: "linear-gradient(135deg, #0ba7f5, #2206d9)", boxShadow: "0 6px 18px rgba(245,158,11,0.4)", transition: "all 0.2s ease" },
-  deleteBtn: { flex: 1, padding: "10px 0", borderRadius: "12px", border: "none", cursor: "pointer", fontWeight: "600", color: "white", background: "linear-gradient(135deg, #ef4444, #dc2626)", boxShadow: "0 6px 18px rgba(239,68,68,0.4)", transition: "all 0.2s ease" },
-  saveBtn: { marginTop: "15px", width: "100%", padding: "12px", borderRadius: "12px", border: "none", cursor: "pointer", fontWeight: "600", color: "white", background: "linear-gradient(135deg, #10b981, #059669)", boxShadow: "0 6px 18px rgba(245,158,11,0.35)", transition: "all 0.2s ease" },
-  input: { width: "100%", padding: "10px 12px", marginBottom: "12px", borderRadius: "10px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.05)", color: "white", outline: "none", fontSize: "14px" },
-  emptyState: { textAlign: "center", padding: "60px", background: "rgba(30, 58, 138, 0.2)", borderRadius: "20px", border: "1px solid rgba(255,255,255,0.08)", color: "#94a3b8" }
+
+textarea: {
+  width: "100%",
+  minHeight: "80px",
+  padding: "10px",
+  borderRadius: "0.5rem",
+  border: "1px solid #cbd5e1",
+  marginBottom: "10px",
+  outline: "none",
+  resize: "none"
+},
+
+subjectText: {
+  fontSize: "14px",
+  color: "#64748b",
+  marginBottom: "15px"
+}
 };

@@ -9,6 +9,8 @@ import StudentDashboard from "./StudentDashboard.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import AskAI from "./AskAI";
 import Navbar from './navbar.jsx';
+import AboutStudent from "./AboutStudent";
+import AboutAdmin from "./AboutAdmin";
 
 
 function App() {
@@ -27,14 +29,7 @@ function App() {
           </ProtectedRoute>
         }
       />
-      <Route
-        path="/teacher-dashboard"
-        element={
-          <ProtectedRoute allowedRoles={[ "admin"]}>
-            <TeacherDashboard />
-          </ProtectedRoute>
-        }
-      />
+      
       <Route
         path="/student-dashboard"
         element={
@@ -68,6 +63,8 @@ function App() {
       <Route path="*" element={<Navigate to="/login" />} />
       
       <Route path="/ask-ai" element={<AskAI />} />
+       <Route path="/about-student" element={<AboutStudent />} />
+      <Route path="/about-admin" element={<AboutAdmin />} />
     </Routes>
   );
 }

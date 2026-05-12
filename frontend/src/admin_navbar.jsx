@@ -23,10 +23,10 @@ function Navbar() {
     <nav className="navbar navbar-expand-lg sticky-top shadow-sm" style={styles.navbar}>
       <div className="container">
 
-        {/* 🔹 Logo */}
+        {/* Logo */}
         <Link
           className="navbar-brand d-flex align-items-center fw-bold"
-          to="/student-dashboard"
+          to="/admin-dashboard"
           style={{ fontSize: "1.1rem", color: "#0f172a" }}
         >
           <div style={styles.logoIcon}>
@@ -39,7 +39,7 @@ function Navbar() {
           <span className="ms-2">Cloudora</span>
         </Link>
 
-        {/* 🔹 Mobile Toggle */}
+        {/* Toggle */}
         <button
           className="navbar-toggler border-0 shadow-none"
           type="button"
@@ -49,16 +49,16 @@ function Navbar() {
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        {/* 🔹 Nav Content */}
+        {/* Nav */}
         <div className="collapse navbar-collapse" id="navbarNav">
 
-          {/* 🔹 Center Links */}
           <ul className="navbar-nav mx-auto" style={styles.navList}>
+
             <li className="nav-item">
               <Link
-                to="/student-dashboard"
+                to="/admin-dashboard"
                 className="nav-link d-flex align-items-center"
-                style={isActive("/student-dashboard") ? styles.activeLink : styles.link}
+                style={isActive("/admin-dashboard") ? styles.activeLink : styles.link}
               >
                 <LayoutDashboard size={18} className="me-2" />
                 Dashboard
@@ -67,40 +67,38 @@ function Navbar() {
 
             <li className="nav-item">
               <Link
-                to="/ask-ai"
+                to="/admin/create-user"
                 className="nav-link d-flex align-items-center"
-                style={isActive("/ask-ai") ? styles.activeLink : styles.link}
+                style={isActive("/admin/create-user") ? styles.activeLink : styles.link}
               >
                 <MessageSquareText size={18} className="me-2" />
-                AI Assistant
+                Create Admin
               </Link>
             </li>
 
             <li className="nav-item">
               <Link
-                to="/about-student"
+                to="/about-admin"
                 className="nav-link d-flex align-items-center"
-                style={isActive("/about") ? styles.activeLink : styles.link}
+                style={isActive("/about-admin") ? styles.activeLink : styles.link}
               >
                 <Info size={18} className="me-2" />
                 About
               </Link>
             </li>
+
           </ul>
 
-          {/* 🔹 Right Section */}
+          {/* Right */}
           <div className="d-flex align-items-center gap-3">
 
-            {/* 🔹 User Card */}
             <div style={styles.userCard}>
               <User size={16} />
-              <span style={styles.userText}>Student</span>
+              <span style={styles.userText}>Admin</span>
             </div>
 
-            {/* 🔹 Divider */}
             <div className="vr d-none d-lg-block" style={{ opacity: 0.1 }}></div>
 
-            {/* 🔹 Logout */}
             <button
               onClick={handleLogout}
               style={styles.logoutBtn}
@@ -110,6 +108,7 @@ function Navbar() {
               <LogOut size={18} />
             </button>
           </div>
+
         </div>
       </div>
     </nav>
@@ -145,7 +144,6 @@ const styles = {
     fontWeight: "500",
     padding: "8px 14px",
     borderRadius: "10px",
-    transition: "all 0.2s ease",
   },
 
   activeLink: {
@@ -177,7 +175,6 @@ const styles = {
     border: "none",
     background: "transparent",
     cursor: "pointer",
-    transition: "all 0.2s ease",
   },
 };
 

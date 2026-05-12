@@ -108,80 +108,193 @@ function Dashboard() {
           </div>
           
           <div style={styles.searchWrapper}>
-            <Search size={18} style={styles.searchIcon} />
-            <input
-              placeholder="Search study materials..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              style={styles.searchBar}
-            />
-          </div>
+  <Search size={18} style={styles.searchIcon} />
+
+  <input
+    placeholder="Search study materials..."
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+
+    onFocus={(e) => {
+      e.target.style.border = "1px solid #4f46e5";
+      e.target.style.boxShadow = "0 0 0 3px rgba(79,70,229,0.15)";
+    }}
+
+    onBlur={(e) => {
+      e.target.style.border = "1px solid #e2e8f0";
+      e.target.style.boxShadow = "none";
+    }}
+
+    style={styles.searchBar}
+  />
+</div>
         </div>
 
         {/* HERO CARD - White with Soft Border */}
-        <div style={styles.heroCard}>
-          <div style={styles.heroText}>
-            <div style={styles.badge}>
-              <GraduationCap size={14} style={{ marginRight: '6px' }} />
-              Welcome Back
-            </div>
-            <h1 style={styles.title}>
-              Hello, <span style={styles.name}>{user?.name || "Student"}</span>!
-            </h1>
-            <p style={styles.description}>
-              Track your progress, download latest materials, and chat with your peers.
-            </p>
-          </div>
-          <div style={styles.heroIllustration} />
-        </div>
+       <div
+  style={styles.heroCard}
+  onMouseEnter={(e) => {
+    e.currentTarget.style.transform = "translateY(-6px) scale(1.01)";
+    e.currentTarget.style.boxShadow = "0 20px 40px -10px rgba(0,0,0,0.15)";
+    e.currentTarget.style.border = "1px solid #4f46e5";
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.style.transform = "translateY(0) scale(1)";
+    e.currentTarget.style.boxShadow = "0 10px 25px -5px rgba(0,0,0,0.05)";
+     e.currentTarget.style.border = "1px solid rgba(255,255,255,0.3)"; // reset
+  }}
+>
+  <div style={styles.heroText}>
+    <div style={styles.badge}>
+      <GraduationCap size={14} style={{ marginRight: '6px' }} />
+      Welcome Back
+    </div>
+
+    <h1 style={styles.title}>
+      Hello, <span style={styles.name}>{user?.name || "Student"}</span>!
+    </h1>
+
+    <p style={styles.description}>
+      Track your progress, download latest materials, and chat with your peers.
+    </p>
+  </div>
+
+  <div style={styles.heroIllustration} />
+</div>
 
         {/* STATS SECTION */}
         <div style={styles.statsGrid}>
-          <div style={styles.statCard}>
-            <div style={{ ...styles.iconBox, backgroundColor: "#eef2ff", color: "#4f46e5" }}>
-              <BookOpen size={24} />
-            </div>
-            <div>
-              <p style={styles.statLabel}>Resources</p>
-              <h3 style={styles.statValue}>{resources.length}</h3>
-            </div>
-          </div>
-          <div style={styles.statCard}>
-            <div style={{ ...styles.iconBox, backgroundColor: "#f0fdf4", color: "#16a34a" }}>
-              <Users size={24} />
-            </div>
-            <div>
-              <p style={styles.statLabel}>Peers Online</p>
-              <h3 style={styles.statValue}>{users.length > 0 ? users.length - 1 : 0}</h3>
-            </div>
-          </div>
-        </div>
+
+  {/* -------- Resources Card -------- */}
+  <div
+    style={styles.statCard}
+    onMouseEnter={(e) => {
+      e.currentTarget.style.backgroundColor = "#eef2ff";
+      e.currentTarget.style.border = "1px solid #c7d2fe";
+      e.currentTarget.style.transform = "translateY(-4px)";
+
+      const texts = e.currentTarget.querySelectorAll("p, h3");
+      texts.forEach(el => el.style.color = "#4f46e5");
+
+      const icon = e.currentTarget.querySelector(".iconBox");
+      if (icon) {
+        icon.style.backgroundColor = "#4f46e5";
+        icon.style.color = "#fff";
+      }
+    }}
+    onMouseLeave={(e) => {
+      e.currentTarget.style.backgroundColor = "#fff";
+      e.currentTarget.style.border = "1px solid #e2e8f0";
+      e.currentTarget.style.transform = "translateY(0)";
+
+      const texts = e.currentTarget.querySelectorAll("p, h3");
+      texts.forEach(el => el.style.color = "");
+
+      const icon = e.currentTarget.querySelector(".iconBox");
+      if (icon) {
+        icon.style.backgroundColor = "#eef2ff";
+        icon.style.color = "#4f46e5";
+      }
+    }}
+  >
+    <div
+      className="iconBox"
+      style={{ ...styles.iconBox, backgroundColor: "#eef2ff", color: "#4f46e5" }}
+    >
+      <BookOpen size={24} />
+    </div>
+
+    <div>
+      <p style={styles.statLabel}>Resources</p>
+      <h3 style={styles.statValue}>{resources.length}</h3>
+    </div>
+  </div>
+
+  {/* -------- Peers Card -------- */}
+  <div
+    style={styles.statCard}
+    onMouseEnter={(e) => {
+    e.currentTarget.style.backgroundColor = "#eef2ff";
+      e.currentTarget.style.border = "1px solid #c7d2fe";
+      e.currentTarget.style.transform = "translateY(-4px)";
+    }}
+    onMouseLeave={(e) => {
+      e.currentTarget.style.backgroundColor = "#fff";
+      e.currentTarget.style.border = "1px solid #e4f0e2";
+      e.currentTarget.style.transform = "translateY(0)";
+    }}
+  >
+    <div
+      style={{ ...styles.iconBox, backgroundColor: "#eef2ff", color: "#4f46e5" }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.backgroundColor = "#16a34a";
+        e.currentTarget.style.color = "#fff";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.backgroundColor = "#f0fdf4";
+        e.currentTarget.style.color = "#16a34a";
+      }}
+    >
+      <Users size={24} />
+    </div>
+
+    <div>
+      <p style={styles.statLabel}>Peers Online</p>
+      <h3 style={styles.statValue}>
+        {users.length > 0 ? users.length - 1 : 0}
+      </h3>
+    </div>
+  </div>
+
+</div>
 
         {/* CONTENT GRID */}
         <h3 style={styles.sectionHeader}>Study Materials</h3>
-        <div style={styles.resourceGrid}>
-          {filteredResources.map((item, index) => (
-            <div key={index} style={styles.resourceCard}>
-              <div style={styles.cardHeader}>
-                   <img
-                     src={bookIcon}
-                   alt="resource icon"
-                     style={styles.resourceEmoji}
-                        onError={(e) => {
-                         e.target.style.display = "none";
-                            }}
-                  />
-                <span style={styles.authorBadge}>{item.uploadedBy || "Faculty"}</span>
-              </div>
-              <h4 style={styles.cardTitle}>{item.title}</h4>
-              <p style={styles.cardDesc}>{item.description}</p>
-              <a href={item.fileUrl} target="_blank" rel="noreferrer" style={styles.primaryBtn}>
-                <ExternalLink size={16} style={{ marginRight: "8px" }} /> Open File
-              </a>
-            </div>
-          ))}
-        </div>
+       <div style={styles.resourceGrid}>
+  {filteredResources.map((item, index) => (
+    <div
+      key={index}
+      style={styles.resourceCard}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = "translateY(-4px)";
+        e.currentTarget.style.boxShadow = "0 10px 20px rgba(0,0,0,0.08)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = "translateY(0)";
+        e.currentTarget.style.boxShadow = "none";
+      }}
+    >
+      <div style={styles.cardHeader}>
+        <img
+          src={bookIcon}
+          alt="resource icon"
+          style={styles.resourceEmoji}
+          onError={(e) => {
+            e.target.style.display = "none";
+          }}
+        />
+        <span style={styles.authorBadge}>
+          {item.uploadedBy || "Faculty"}
+        </span>
       </div>
+
+      <h4 style={styles.cardTitle}>{item.title}</h4>
+      <p style={styles.cardDesc}>{item.description}</p>
+
+      <a
+        href={item.fileUrl}
+        target="_blank"
+        rel="noreferrer"
+        style={styles.primaryBtn}
+      >
+        <ExternalLink size={16} style={{ marginRight: "8px" }} />
+        Open File
+      </a>
+    </div>
+  ))}
+</div>
+</div>
+
 
       {/* CHAT FAB */}
       <button style={styles.chatFab} onClick={() => setShowChat(!showChat)}>
@@ -288,25 +401,30 @@ const styles = {
  pageHeader: { display: "flex", alignItems: "center", color: "#fff" },
   searchWrapper: { position: "relative", width: "300px" },
   searchIcon: { position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", color: "#94a3b8" },
-  searchBar: {
-    width: "100%",
-    padding: "10px 15px 10px 40px",
-    borderRadius: "0.75rem",
-    border: "1px solid #e2e8f0",
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
-    outline: "none",
-    fontSize: "0.9rem"
-  },
-  heroCard: {
-    padding: "40px",
-    borderRadius: "1.25rem",
-    backgroundColor: "rgba(255, 255, 255, 0.95)",
-    backdropFilter: "blur(10px)",
-    border: "1px solid rgba(255, 255, 255, 0.3)",
-    marginBottom: "30px",
-    display: "flex",
-    boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.05)"
-  },
+ searchBar: {
+  width: "100%",
+  padding: "10px 15px 10px 40px",
+  borderRadius: "0.75rem",
+  border: "1px solid #e2e8f0",
+  backgroundColor: "rgba(255, 255, 255, 0.9)",
+  outline: "none",
+  fontSize: "0.9rem",
+  transition: "all 0.25s ease"
+},
+ heroCard: {
+  padding: "40px",
+  borderRadius: "1.25rem",
+  backgroundColor: "rgba(255, 255, 255, 0.95)",
+  backdropFilter: "blur(10px)",
+  border: "1px solid rgba(255,255,255,0.3)", // default border
+  marginBottom: "30px",
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.05)",
+  transition: "all 0.3s ease",  // 👈 enables smooth border + shadow + move
+  cursor: "pointer"
+},
   badge: {
     display: "inline-flex",
     alignItems: "center",
@@ -325,25 +443,57 @@ const styles = {
   
   statsGrid: { display: "flex", gap: "20px", marginBottom: "40px" },
   statCard: { 
-    flex: 1, backgroundColor: "#fff", padding: "20px", borderRadius: "1rem", 
-    display: "flex", alignItems: "center", gap: "15px", border: "1px solid #e2e8f0",
-    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.02)"
-  },
+  flex: 1,
+  backgroundColor: "#fff",
+  padding: "20px",
+  borderRadius: "1rem", 
+  display: "flex",
+  alignItems: "center",
+  gap: "15px",
+  border: "1px solid #e2e8f0",
+  boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.02)",
+  transition: "all 0.25s ease",
+  cursor: "pointer"
+},
+heroIllustration: {
+  width: "120px",
+  height: "120px",
+  borderRadius: "50%",
+  background: "linear-gradient(135deg, #4f46e5, #6366f1)",
+  opacity: 0.1
+},
   iconBox: { width: "48px", height: "48px", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center" },
-  statLabel: { margin: 0, fontSize: "13px", color: "#64748b", fontWeight: "500" },
-  statValue: { margin: 0, fontSize: "24px", fontWeight: "700", color: "#1e293b" },
+statLabel: {
+  margin: 0,
+  fontSize: "13px",
+  fontWeight: "500",
+  transition: "all 0.2s ease"
+},
 
+statValue: {
+  margin: 0,
+  fontSize: "24px",
+  fontWeight: "700",
+  transition: "all 0.2s ease"
+},
   sectionHeader: { fontSize: "18px", fontWeight: "700", color: "#1e293b", marginBottom: "20px" },
   resourceGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "20px" },
   resourceCard: {
-    backgroundColor: "#fff", padding: "25px", borderRadius: "1rem", border: "1px solid #e2e8f0",
-    display: "flex", flexDirection: "column", transition: "all 0.2s ease"
-  },
+  backgroundColor: "#fff",
+  padding: "25px",
+  borderRadius: "1rem",
+  border: "1px solid #4f46e5",
+  display: "flex",
+  flexDirection: "column",
+  transition: "all 0.2s ease",
+  cursor: "pointer"
+},
   resourceEmoji: {
   width: "24px",
   height: "24px",
   objectFit: "contain"
 },
+
 
   cardHeader: { display: "flex", justifyContent: "space-between", marginBottom: "15px" },
   

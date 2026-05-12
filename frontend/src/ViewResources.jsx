@@ -47,14 +47,22 @@ export default function ViewResources({
         <div style={styles.grid}>
           {resources.map((r) => (
             <div
-              key={r._id}
-              style={{
-                ...styles.card,
-                border: selectedResources.includes(r._id)
-                  ? "2px solid #10b981"
-                  : styles.card.border,
-              }}
-            >
+  key={r._id}
+  style={{
+    ...styles.card,
+    border: selectedResources.includes(r._id)
+      ? "2px solid #10b981"
+      : styles.card.border,
+  }}
+  onMouseEnter={(e) => {
+    e.currentTarget.style.transform = "translateY(-8px)";
+    e.currentTarget.style.boxShadow = "0 14px 30px rgba(59,130,246,0.25)";
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.style.transform = "translateY(0)";
+    e.currentTarget.style.boxShadow = "none";
+  }}
+>
               {/* Checkbox + Preview */}
               <input
                 type="checkbox"
@@ -132,13 +140,14 @@ const styles = {
   },
 
   card: {
-    background: "linear-gradient(135deg, #1e3a8a, #1e293b)",
-    padding: "35px",
-    borderRadius: "22px",
-    border: "1px solid rgba(255,255,255,0.08)",
-    transition: "all 0.3s ease",
-    position: "relative"
-  },
+  background: "linear-gradient(135deg, #1e3a8a, #1e293b)",
+  padding: "35px",
+  borderRadius: "22px",
+  border: "1px solid rgba(255,255,255,0.08)",
+  transition: "all 0.3s ease",
+  position: "relative",
+  cursor: "pointer",
+},
 
   iconBadge: {
     width: "55px",

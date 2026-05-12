@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Navbar from "./Navbar";
 
 const AskAI = () => {
   const [question, setQuestion] = useState("");
@@ -26,7 +27,6 @@ const AskAI = () => {
   // ---------------- INGEST ----------------
   const handleIngest = async () => {
     if (!documentId) return alert("Select a document first");
-
     setIngesting(true);
 
     try {
@@ -38,7 +38,7 @@ const AskAI = () => {
 
       const data = await res.json();
       alert(`Ingestion done: ${data.chunks} chunks`);
-    } catch (err) {
+    } catch {
       alert("Ingestion failed");
     }
 
@@ -74,11 +74,7 @@ const AskAI = () => {
     } catch {
       setMessages([
         ...updated,
-        {
-          role: "ai",
-          text: "Error fetching response",
-          sources: [],
-        },
+        { role: "ai", text: "Error fetching response", sources: [] },
       ]);
     }
 
@@ -89,130 +85,165 @@ const AskAI = () => {
   // ---------------- UI ----------------
   return (
     <div style={styles.page}>
-      <h2 style={styles.header}>🤖 AI Document Assistant</h2>
+      <Navbar />
 
-      {/* CONTROLS */}
-      <div style={styles.controls}>
-        <select
-          value={documentId}
-          onChange={(e) => setDocumentId(e.target.value)}
-          style={styles.select}
-        >
-          <option value="">Select Document</option>
-          {docs.map((doc) => (
-            <option key={doc._id} value={doc._id}>
-              {doc.title}
-            </option>
-          ))}
-        </select>
+      <div style={styles.container}>
+        {/* HEADER CARD */}
+        <div style={styles.headerCard}>
+          <h2 style={styles.title}>🤖 AI Assistant</h2>
 
-        <button onClick={handleIngest} style={styles.ingestBtn}>
-          {ingesting ? "Processing..." : "Ingest"}
-        </button>
-      </div>
+          <div style={styles.controls}>
+            <select
+              value={documentId}
+              onChange={(e) => setDocumentId(e.target.value)}
+              style={styles.select}
+            >
+              <option value="">Select Document</option>
+              {docs.map((doc) => (
+                <option key={doc._id} value={doc._id}>
+                  {doc.title}
+                </option>
+              ))}
+            </select>
 
-      {/* CHAT BOX */}
-      <div style={styles.chatBox}>
-        {messages.map((msg, i) => (
-          <div
-            key={i}
-            style={{
-              ...styles.msg,
-              alignSelf: msg.role === "user" ? "flex-end" : "flex-start",
-              background: msg.role === "user" ? "#2563eb" : "#f3f4f6",
-              color: msg.role === "user" ? "white" : "black",
-            }}
-          >
-            {/* MESSAGE */}
-            <div>{msg.text}</div>
+            <button onClick={handleIngest} style={styles.ingestBtn}>
+              {ingesting ? "Processing..." : "Ingest"}
+            </button>
+          </div>
+        </div>
 
-            {/* SOURCES */}
-            {msg.sources?.length > 0 && (
-              <div style={styles.sources}>
-                <b>Sources:</b>
+        {/* CHAT CARD */}
+        <div style={styles.chatCard}>
+          <div style={styles.chatBox}>
+            {messages.map((msg, i) => (
+              <div
+                key={i}
+                style={{
+                  ...styles.msg,
+                  alignSelf:
+                    msg.role === "user" ? "flex-end" : "flex-start",
+                  background:
+                    msg.role === "user" ? "#4f46e5" : "#f1f5f9",
+                  color: msg.role === "user" ? "#fff" : "#1e293b",
+                }}
+              >
+                <div>{msg.text}</div>
 
-                {msg.sources.map((s, idx) => (
-                  <div key={idx} style={styles.sourceBox}>
-                    <div style={{ fontSize: "12px", fontWeight: "bold" }}>
-                      Chunk #{s.chunkIndex ?? idx}
-                    </div>
-
-                    <div style={{ fontSize: "12px", marginTop: "4px" }}>
-                      {s.text}
-                    </div>
+                {msg.sources?.length > 0 && (
+                  <div style={styles.sources}>
+                    <b>Sources:</b>
+                    {msg.sources.map((s, idx) => (
+                      <div key={idx} style={styles.sourceBox}>
+                        <div style={{ fontSize: "11px", fontWeight: 600 }}>
+                          Chunk #{s.chunkIndex ?? idx}
+                        </div>
+                        <div style={{ fontSize: "11px" }}>
+                          {s.text}
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                )}
               </div>
+            ))}
+
+            {loading && (
+              <div style={styles.loading}>Thinking...</div>
             )}
           </div>
-        ))}
 
-        {loading && <div style={styles.loading}>Thinking...</div>}
-      </div>
+          {/* INPUT */}
+          <div style={styles.inputBar}>
+            <input
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+              placeholder="Ask about your document..."
+              style={styles.input}
+              onKeyDown={(e) => e.key === "Enter" && handleAsk()}
+            />
 
-      {/* INPUT */}
-      <div style={styles.inputBar}>
-        <input
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-          placeholder="Ask about your document..."
-          style={styles.input}
-        />
-
-        <button onClick={handleAsk} style={styles.askBtn}>
-          Ask
-        </button>
+            <button onClick={handleAsk} style={styles.askBtn}>
+              Ask
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
-// ---------------- STYLES ----------------
+// ---------------- STYLES (Dashboard match) ----------------
 const styles = {
   page: {
-    maxWidth: "850px",
-    margin: "30px auto",
-    fontFamily: "Arial",
-    display: "flex",
-    flexDirection: "column",
-    height: "90vh",
+    minHeight: "100vh",
+    backgroundColor: "#f8fafc",
+    backgroundImage:
+      "radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%)",
+    paddingBottom: "40px",
+    fontFamily: "'Inter', sans-serif",
   },
 
-  header: {
-    fontSize: "22px",
-    fontWeight: "bold",
-    marginBottom: "15px",
+  container: {
+    maxWidth: "900px",
+    margin: "0 auto",
+    padding: "20px",
+  },
+
+  headerCard: {
+    backgroundColor: "rgba(255,255,255,0.95)",
+    padding: "20px",
+    borderRadius: "1.25rem",
+    marginTop: "20px",
+    marginBottom: "20px",
+    border: "1px solid rgba(255,255,255,0.3)",
+    backdropFilter: "blur(10px)",
+  },
+
+  title: {
+    fontSize: "20px",
+    fontWeight: "800",
+    color: "#1e293b",
+    marginBottom: "12px",
   },
 
   controls: {
     display: "flex",
     gap: "10px",
-    marginBottom: "10px",
   },
 
   select: {
     flex: 1,
     padding: "10px",
-    borderRadius: "8px",
-    border: "1px solid #ccc",
+    borderRadius: "0.75rem",
+    border: "1px solid #e2e8f0",
+    outline: "none",
   },
 
   ingestBtn: {
-    padding: "10px 15px",
-    borderRadius: "8px",
+    padding: "10px 14px",
+    borderRadius: "0.75rem",
     border: "none",
     background: "#f97316",
-    color: "white",
+    color: "#fff",
+    fontWeight: 600,
     cursor: "pointer",
+  },
+
+  chatCard: {
+    backgroundColor: "rgba(255,255,255,0.95)",
+    borderRadius: "1.25rem",
+    border: "1px solid rgba(255,255,255,0.3)",
+    backdropFilter: "blur(10px)",
+    display: "flex",
+    flexDirection: "column",
+    height: "70vh",
+    overflow: "hidden",
   },
 
   chatBox: {
     flex: 1,
-    overflowY: "auto",
     padding: "15px",
-    border: "1px solid #e5e7eb",
-    borderRadius: "10px",
-    background: "#fafafa",
+    overflowY: "auto",
     display: "flex",
     flexDirection: "column",
     gap: "10px",
@@ -228,40 +259,44 @@ const styles = {
   sources: {
     marginTop: "8px",
     fontSize: "11px",
-    opacity: 0.8,
+    opacity: 0.9,
   },
 
   sourceBox: {
-    marginTop: "6px",
+    marginTop: "5px",
     padding: "6px",
-    background: "#e5e7eb",
+    background: "#e2e8f0",
     borderRadius: "6px",
   },
 
   loading: {
     fontSize: "13px",
-    color: "#666",
+    color: "#64748b",
   },
 
   inputBar: {
     display: "flex",
-    marginTop: "10px",
     gap: "10px",
+    padding: "12px",
+    borderTop: "1px solid #e2e8f0",
+    background: "#f8fafc",
   },
 
   input: {
     flex: 1,
     padding: "12px",
-    borderRadius: "8px",
-    border: "1px solid #ccc",
+    borderRadius: "0.75rem",
+    border: "1px solid #e2e8f0",
+    outline: "none",
   },
 
   askBtn: {
-    padding: "12px 18px",
-    borderRadius: "8px",
+    padding: "12px 16px",
+    borderRadius: "0.75rem",
     border: "none",
-    background: "#2563eb",
-    color: "white",
+    background: "#4f46e5",
+    color: "#fff",
+    fontWeight: 600,
     cursor: "pointer",
   },
 };
