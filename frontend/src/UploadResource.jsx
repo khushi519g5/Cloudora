@@ -21,13 +21,21 @@ export default function UploadResource({ refreshResources }) {
     e.preventDefault();
 
     try {
+      // 1. Upload resource
       await axios.post("http://localhost:5000/api/resources/upload", {
         ...formData,
         uploadedBy: "admin123"
       });
 
+      // 2. Log activity (IMPORTANT)
+      await axios.post("http://localhost:5000/api/activity", {
+        message: `admin123 uploaded ${formData.title}`,
+        type: "upload"
+      });
+
       alert("Resource Uploaded Successfully!");
 
+      // reset form
       setFormData({
         title: "",
         description: "",
@@ -35,7 +43,9 @@ export default function UploadResource({ refreshResources }) {
         fileUrl: ""
       });
 
+      // refresh dashboard/resources
       refreshResources();
+
     } catch (error) {
       console.error(error);
       alert("Error uploading resource");
@@ -71,12 +81,6 @@ export default function UploadResource({ refreshResources }) {
           onChange={handleChange}
           required
           style={styles.input}
-          onMouseEnter={(e) => {
-            e.target.style.border = "1px solid #3b82f6";
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.border = "1px solid #e2e8f0";
-          }}
         />
 
         <input
@@ -85,12 +89,6 @@ export default function UploadResource({ refreshResources }) {
           value={formData.description}
           onChange={handleChange}
           style={styles.input}
-          onMouseEnter={(e) => {
-            e.target.style.border = "1px solid #3b82f6";
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.border = "1px solid #e2e8f0";
-          }}
         />
 
         <input
@@ -100,12 +98,6 @@ export default function UploadResource({ refreshResources }) {
           onChange={handleChange}
           required
           style={styles.input}
-          onMouseEnter={(e) => {
-            e.target.style.border = "1px solid #3b82f6";
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.border = "1px solid #e2e8f0";
-          }}
         />
 
         <input
@@ -115,26 +107,9 @@ export default function UploadResource({ refreshResources }) {
           onChange={handleChange}
           required
           style={styles.input}
-          onMouseEnter={(e) => {
-            e.target.style.border = "1px solid #3b82f6";
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.border = "1px solid #e2e8f0";
-          }}
         />
 
-        <button
-          type="submit"
-          style={styles.button}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = "#2563eb";
-            e.currentTarget.style.transform = "scale(1.02)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = "#4f46e5";
-            e.currentTarget.style.transform = "scale(1)";
-          }}
-        >
+        <button type="submit" style={styles.button}>
           <Upload size={16} style={{ marginRight: 6 }} />
           Upload
         </button>
@@ -143,7 +118,8 @@ export default function UploadResource({ refreshResources }) {
   );
 }
 
-const styles = {
+
+ const styles = {
   card: {
     backgroundColor: "rgba(255,255,255,0.95)",
     backdropFilter: "blur(10px)",

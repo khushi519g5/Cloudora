@@ -27,7 +27,19 @@ const resourceSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
-  }
+  },
+   views: {
+    type: Number,
+    default: 0,
+  },
+
+  downloads: {
+    type: Number,
+    default: 0,
+  },
+}, {
+  timestamps: true, // replaces createdAt automatically
+
 });
 
 module.exports = mongoose.model("Resource", resourceSchema);

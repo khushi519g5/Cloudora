@@ -80,7 +80,7 @@ function Navbar() {
               <Link
                 to="/about-student"
                 className="nav-link d-flex align-items-center"
-                style={isActive("/about") ? styles.activeLink : styles.link}
+                style={isActive("/about-student") ? styles.activeLink : styles.link}
               >
                 <Info size={18} className="me-2" />
                 About

@@ -11,6 +11,7 @@ import AskAI from "./AskAI";
 import Navbar from './navbar.jsx';
 import AboutStudent from "./AboutStudent";
 import AboutAdmin from "./AboutAdmin";
+import AnalyticsDashboard from "./Anal_dash.jsx";
 
 
 function App() {
@@ -65,6 +66,7 @@ function App() {
       <Route path="/ask-ai" element={<AskAI />} />
        <Route path="/about-student" element={<AboutStudent />} />
       <Route path="/about-admin" element={<AboutAdmin />} />
+       <Route path="/analytics" element={<AnalyticsDashboard />} />
     </Routes>
   );
 }

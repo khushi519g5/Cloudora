@@ -51,7 +51,7 @@ router.delete("/:id", async (req, res) => {
 // UPDATE RESOURCE
 router.put("/:id", async (req, res) => {
   try {
-    const { title, description, subject, roleAccess } = req.body;
+    const { title, description, subject } = req.body;
 
     const updatedResource = await Resource.findByIdAndUpdate(
       req.params.id,
@@ -59,9 +59,8 @@ router.put("/:id", async (req, res) => {
         title,
         description,
         subject,
-        roleAccess
       },
-      { new: true } // returns updated document
+      { new: true }
     );
 
     if (!updatedResource) {
@@ -70,8 +69,42 @@ router.put("/:id", async (req, res) => {
 
     res.json({
       message: "Resource updated successfully",
-      updatedResource
+      updatedResource,
     });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  try {
+    const resource = await Resource.findById(req.params.id);
+
+    if (!resource) {
+      return res.status(404).json({ message: "Resource not found" });
+    }
+
+    // increase views
+    resource.views = (resource.views || 0) + 1;
+    await resource.save();
+
+    res.json(resource);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+router.put("/download/:id", async (req, res) => {
+  try {
+    const resource = await Resource.findById(req.params.id);
+
+    if (!resource) {
+      return res.status(404).json({ message: "Resource not found" });
+    }
+
+    resource.downloads = (resource.downloads || 0) + 1;
+    await resource.save();
+
+    res.json({ message: "Download counted", fileUrl: resource.fileUrl });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

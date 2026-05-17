@@ -76,6 +76,18 @@ function Navbar() {
               </Link>
             </li>
 
+<li className="nav-item">
+              <Link
+                to="/analytics"
+                className="nav-link d-flex align-items-center"
+                style={isActive("/analytics") ? styles.activeLink : styles.link}
+              >
+                <MessageSquareText size={18} className="me-2" />
+                System Analytics
+              </Link>
+            </li>
+
+
             <li className="nav-item">
               <Link
                 to="/about-admin"

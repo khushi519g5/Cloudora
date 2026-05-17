@@ -12,6 +12,9 @@ const authRoutes = require("./routes/authRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const Message = require("./models/Message");
 const ragRoutes = require("./routes/ragRoutes");
+const activityRoutes = require("./routes/activityRoutes");
+
+
 
 const app = express();
 
@@ -33,6 +36,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/resources", resourceRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/rag", ragRoutes);
+app.use("/api/activity", activityRoutes);
 
 // 🔥 CREATE HTTP SERVER
 const server = http.createServer(app);
