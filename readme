@@ -1,72 +1,148 @@
-📚 Resource Recommendation System
+# 📚 Resource Recommendation System
 
- A full-stack intelligent learning platform that tracks user activity and recommends personalized educational resources using a behavior-driven recommendation engine, supported by analytics and notifications.
+**Author:** Khushi Mittal
 
-🚀 Live Overview
+---
 
-This project helps students discover relevant learning materials based on their interactions. It combines:
-- Activity tracking
-- Recommendation system
-- Analytics dashboard
-- Notification system
+## 🛠️ Tech Stack
 
-to create a personalized learning experience.
+<div align="center">
 
-✨ Key Features
+**Frontend**  
+![React](https://img.shields.io/badge/React.js-18-blue?style=for-the-badge&logo=react)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5-purple?style=for-the-badge&logo=bootstrap)
+![Axios](https://img.shields.io/badge/Axios-API-green?style=for-the-badge)
 
- 👤 Authentication & Roles
+**Backend**  
+![Node.js](https://img.shields.io/badge/Node.js-Express-green?style=for-the-badge&logo=node.js)
+![FastAPI](https://img.shields.io/badge/FastAPI-Python-teal?style=for-the-badge&logo=fastapi)
+
+**Database**  
+![MongoDB](https://img.shields.io/badge/MongoDB-Database-brightgreen?style=for-the-badge&logo=mongodb)
+
+</div>
+
+---
+
+## 🌟 Project Overview
+
+A **full-stack intelligent learning platform** that tracks user behavior and provides **personalized resource recommendations** using a hybrid backend system.
+
+It combines:
+
+- Activity tracking system  
+- Recommendation engine  
+- Analytics dashboard  
+- Notification system  
+
+to deliver a **personalized learning experience for students**.
+
+---
+
+## ✨ Features
+
+### 👤 Authentication & Roles
 - Secure login system
 - Role-based access (Student / Admin)
 - Protected routes
 
- 📚 Resource Management
+---
+
+### 📚 Resource Management
 - Add and manage learning resources
 - Each resource contains:
   - Name
   - URL
-  - Category (optional)
-- Track resource engagement (views)
+  - Category
+- Track resource views and engagement
 
-🔥 Trending System
-- Automatically identifies popular resources
-- Based on user views and interactions
+---
 
-🧠 Recommendation Engine
-- Tracks user activity (views, interactions)
+### 🔥 Trending System
+- Automatically detects popular resources
+- Based on user interaction data
+
+---
+
+### 🧠 Recommendation System
+- Tracks user activity (views, clicks)
 - Suggests relevant resources dynamically
 - Personalized recommendations per user
 
-📊 Analytics Dashboard
-- User activity insights
-- Resource engagement statistics
-- Most viewed resources
-- System usage overview
+---
 
-🔔 Notification System
-- Alerts for:
+### 📊 Analytics Dashboard
+- User activity tracking
+- Resource engagement insights
+- Most viewed resources
+- System usage analytics
+
+---
+
+### 🔔 Notification System
+- Notifications for:
   - New resources
   - New recommendations
-- Read / Unread status tracking
-- Notification history per user
+- Read / unread status support
 
- ⚙️ Installation & Setup
+---
 
-1️⃣ Clone Repository
+
+---
+
+## 📁 Project Structure
+
+
+/client
+├── src/components
+├── src/pages
+├── src/assets
+
+/backend
+├── routes
+├── controllers
+├── models
+
+/backend-ai
+├── app.py
+├── recommendation logic
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1️⃣ Clone Repository
 ```bash
 git clone https://github.com/your-username/resource-recommendation-system.git
 cd resource-recommendation-system
-
-Full Project Run Flow
-1. Backend AI service
+---
+Start AI Backend (FastAPI)
 cd backend-ai
 uvicorn app:app --reload --port 8000
 
-2. Main backend (Node/Express)
+---
+Start Main Backend (Node.js)
 cd backend
-npm install
 npm start
 
-3. Frontend
-cd frontend
-npm install
+---
+Start Frontend (React)
+cd client
 npm start
+
+
+🎯 Project Highlights
+Real-world recommendation system
+Hybrid architecture (Node.js + FastAPI)
+Activity-based personalization
+Analytics-driven insights
+Modular scalable design
+
+🚀 Future Improvements
+Real-time notifications (WebSockets)
+Machine learning-based recommendations
+Semantic search integration
+Email notifications system
+
+👩‍💻 Author
+Khushi Mittal
