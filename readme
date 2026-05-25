@@ -1,41 +1,68 @@
-![MERN](https://img.shields.io/badge/MERN-Stack-green)
-![React](https://img.shields.io/badge/React-Frontend-blue)
-![Node](https://img.shields.io/badge/Node.js-Backend-green)
-![MongoDB](https://img.shields.io/badge/MongoDB-Database-brightgreen)
-![Socket.io](https://img.shields.io/badge/Socket.io-Realtime-black)
-![License](https://img.shields.io/badge/License-MIT-yellow)
-☁️ Cloudora
-A modern cloud-based platform for seamless file management, secure access, and real-time collaboration.
-🚀 Overview
-Cloudora is a full-stack cloud management system designed to simplify how users store, access, and collaborate on files. It focuses on performance, usability, and real-time interaction, making it suitable for scalable cloud applications.
-✨ Key Highlights
-- Secure authentication (JWT-based)
-- Cloud file upload, storage & management
-- Fast search & filtering system
-- Real-time collaboration support (Socket.io)
-- Interactive dashboard for resource tracking
-- Fully responsive UI
-🧠 Tech Stack
-Frontend: React.js, Axios, CSS/Tailwind
-Backend: Node.js, Express.js, MongoDB
-Others: Socket.io, JWT Authentication
-🏗️ Architecture
-Client (React) → REST API (Express.js) → MongoDB → Socket Server
-⚙️ Setup Guide
-1. Clone repo
-2. Install backend dependencies
-3. Install frontend dependencies
-4. Run both servers
-🔐 Environment Variables
-PORT=5000
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_secret_key
-📈 Future Enhancements
-- AI-based file categorization
-- Role-based access control
-- Activity logs dashboard
-- Mobile app support
-- File version history system
-👨‍💻 Developer
-Khushi Mittal
-Full Stack Developer | MERN Stack | Cloud Enthusiast
+# 📚 Resource Recommendation System
+
+> A full-stack intelligent learning platform that tracks user activity and recommends personalized educational resources using a behavior-driven recommendation engine, supported by analytics and notifications.
+
+---
+
+## 🚀 Live Overview
+
+This project helps students discover relevant learning materials based on their interactions. It combines:
+- Activity tracking
+- Recommendation system
+- Analytics dashboard
+- Notification system
+
+to create a **personalized learning experience**.
+
+---
+
+## ✨ Key Features
+
+### 👤 Authentication & Roles
+- Secure login system
+- Role-based access (Student / Admin)
+- Protected routes
+
+---
+
+### 📚 Resource Management
+- Add and manage learning resources
+- Each resource contains:
+  - Name
+  - URL
+  - Category (optional)
+- Track resource engagement (views)
+
+---
+
+### 🔥 Trending System
+- Automatically identifies popular resources
+- Based on user views and interactions
+
+---
+
+### 🧠 Recommendation Engine
+- Tracks user activity (views, interactions)
+- Suggests relevant resources dynamically
+- Personalized recommendations per user
+
+---
+
+### 📊 Analytics Dashboard
+- User activity insights
+- Resource engagement statistics
+- Most viewed resources
+- System usage overview
+
+---
+
+### 🔔 Notification System
+- Alerts for:
+  - New resources
+  - New recommendations
+- Read / Unread status tracking
+- Notification history per user
+
+---
+
+## 🧠 System Architecture
