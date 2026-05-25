@@ -1,4 +1,5 @@
-# 📚 Resource Recommendation System
+# 📚 Cloudora
+
 
 **Author:** Khushi Mittal
 
@@ -103,20 +104,22 @@ Uses behavioral signals and engagement metrics
 git clone https://github.com/your-username/resource-recommendation-system.git
 cd resource-recommendation-system
 
-### ** Start AI Backend (FastAPI)**
+ Start AI Backend (FastAPI)
 cd backend-ai
 uvicorn app:app --reload --port 8000
 
-
-###  **Start Main Backend (Node.js)**
+Start Main Backend (Node.js)
 cd backend
 npm start
 
-#### **Start Frontend (React)**
+ Start Frontend (React)
 cd frontend
 npm run dev
 
-🎯 Project Highlights
+---
+
+###  🎯 Project Highlights
+
 Real-world recommendation system
 Hybrid backend architecture (Node + FastAPI)
 Activity-based personalization
