@@ -73,10 +73,6 @@ Embedding-based retrieval finds relevant sections
 LLM answers user questions using selected document context
 Enables AskAI-style intelligent document interaction
 
-### 📚 Recommendation Engine
-Tracks user interactions (views, clicks)
-Suggests relevant learning resources
-Uses behavioral signals and engagement metrics
 
 ## 🛠️ Tech Stack
 
@@ -95,7 +91,14 @@ Uses behavioral signals and engagement metrics
 ---
 
 
----
+Cloudora/
+│── .idea/              # IDE configuration files
+│── Backend/            # Node.js main backend (APIs, auth, business logic)
+│── Backend-AI/         # Python/FastAPI AI backend (RAG / ML / AI services)
+│── Frontend/           # React frontend (UI, pages, components)
+│── package.json        # Root dependencies (if any)
+│── .gitignore          # Git ignored files
+│── README.md           # Project documentation
 
 ## ⚙️ Installation & Setup
 
@@ -103,16 +106,16 @@ Uses behavioral signals and engagement metrics
 ```bash
 git clone https://github.com/your-username/resource-recommendation-system.git
 cd resource-recommendation-system
-
- Start AI Backend (FastAPI)
+---
+1. Start AI Backend (FastAPI)
 cd backend-ai
 uvicorn app:app --reload --port 8000
-
-Start Main Backend (Node.js)
+---
+2. Start Main Backend (Node.js)
 cd backend
 npm start
-
- Start Frontend (React)
+---
+3. Start Frontend (React)
 cd frontend
 npm run dev
 
@@ -125,3 +128,28 @@ Hybrid backend architecture (Node + FastAPI)
 Activity-based personalization
 Analytics-driven insights
 Modular and scalable design
+
+
+🔐 Environment Variables
+
+Cloudora uses separate environment configurations for each service.
+
+📦 Backend (Node.js)
+
+Create a .env file inside Backend/:
+
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret_key
+
+🧠 Backend-AI (FastAPI)
+
+Create a .env file inside Backend-AI/:
+
+OPENAI_API_KEY=your_openai_key_if_used
+
+🌐 Frontend (React)
+
+Create a .env file inside Frontend/:
+
+REACT_APP_API_URL=http://localhost:5000
+
