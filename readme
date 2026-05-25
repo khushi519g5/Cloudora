@@ -1,10 +1,8 @@
-# 📚 Resource Recommendation System
+📚 Resource Recommendation System
 
-> A full-stack intelligent learning platform that tracks user activity and recommends personalized educational resources using a behavior-driven recommendation engine, supported by analytics and notifications.
+ A full-stack intelligent learning platform that tracks user activity and recommends personalized educational resources using a behavior-driven recommendation engine, supported by analytics and notifications.
 
----
-
-## 🚀 Live Overview
+🚀 Live Overview
 
 This project helps students discover relevant learning materials based on their interactions. It combines:
 - Activity tracking
@@ -12,7 +10,7 @@ This project helps students discover relevant learning materials based on their 
 - Analytics dashboard
 - Notification system
 
-to create a **personalized learning experience**.
+to create a personalized learning experience.
 
 ✨ Key Features
 
@@ -51,4 +49,24 @@ to create a **personalized learning experience**.
 - Read / Unread status tracking
 - Notification history per user
 
- 🧠 System Architecture
+ ⚙️ Installation & Setup
+
+1️⃣ Clone Repository
+```bash
+git clone https://github.com/your-username/resource-recommendation-system.git
+cd resource-recommendation-system
+
+Full Project Run Flow
+1. Backend AI service
+cd backend-ai
+uvicorn app:app --reload --port 8000
+
+2. Main backend (Node/Express)
+cd backend
+npm install
+npm start
+
+3. Frontend
+cd frontend
+npm install
+npm start
