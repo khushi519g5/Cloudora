@@ -14,18 +14,14 @@ This project helps students discover relevant learning materials based on their 
 
 to create a **personalized learning experience**.
 
----
+✨ Key Features
 
-## ✨ Key Features
-
-### 👤 Authentication & Roles
+ 👤 Authentication & Roles
 - Secure login system
 - Role-based access (Student / Admin)
 - Protected routes
 
----
-
-### 📚 Resource Management
+ 📚 Resource Management
 - Add and manage learning resources
 - Each resource contains:
   - Name
@@ -33,36 +29,26 @@ to create a **personalized learning experience**.
   - Category (optional)
 - Track resource engagement (views)
 
----
-
-### 🔥 Trending System
+🔥 Trending System
 - Automatically identifies popular resources
 - Based on user views and interactions
 
----
-
-### 🧠 Recommendation Engine
+🧠 Recommendation Engine
 - Tracks user activity (views, interactions)
 - Suggests relevant resources dynamically
 - Personalized recommendations per user
 
----
-
-### 📊 Analytics Dashboard
+📊 Analytics Dashboard
 - User activity insights
 - Resource engagement statistics
 - Most viewed resources
 - System usage overview
 
----
-
-### 🔔 Notification System
+🔔 Notification System
 - Alerts for:
   - New resources
   - New recommendations
 - Read / Unread status tracking
 - Notification history per user
 
----
-
-## 🧠 System Architecture
+ 🧠 System Architecture
