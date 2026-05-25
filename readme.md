@@ -101,6 +101,20 @@ It combines:
 
 ---
 
+## 🖥️ UI Preview
+
+### Dashboard
+![Dashboard](./assets/dashboard.png)
+
+### Recommendations
+![Recommendations](./assets/recommendations.png)
+
+### Analytics
+![Analytics](./assets/analytics.png)
+
+
+
+
 ## 📁 Project Structure
 
 ```bash
