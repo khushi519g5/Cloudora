@@ -1,25 +1,28 @@
-# 📚 Resource Recommendation System
+ 🍽️ Culinary Haven – Complete Restaurant Website
+
 
 **Author:** Khushi Mittal
 
----
 
 
 ## 🛠️ Tech Stack
 
 <div align="center">
 
-**Frontend**  
-![React](https://img.shields.io/badge/React.js-18-blue?style=for-the-badge&logo=react)
-![Bootstrap](https://img.shields.io/badge/Bootstrap-5-purple?style=for-the-badge&logo=bootstrap)
-![Axios](https://img.shields.io/badge/Axios-API-green?style=for-the-badge)
+**Frontend**
+![HTML](https://img.shields.io/badge/HTML-5-orange?style=for-the-badge\&logo=html5)
+![CSS](https://img.shields.io/badge/CSS-3-blue?style=for-the-badge\&logo=css3)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5-purple?style=for-the-badge\&logo=bootstrap)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6-yellow?style=for-the-badge\&logo=javascript)
 
-**Backend**  
-![Node.js](https://img.shields.io/badge/Node.js-Express-green?style=for-the-badge&logo=node.js)
-![FastAPI](https://img.shields.io/badge/FastAPI-Python-teal?style=for-the-badge&logo=fastapi)
+**Backend**
+![PHP](https://img.shields.io/badge/PHP-7.4-purple?style=for-the-badge\&logo=php)
 
-**Database**  
-![MongoDB](https://img.shields.io/badge/MongoDB-Database-brightgreen?style=for-the-badge&logo=mongodb)
+**Database**
+![MySQL](https://img.shields.io/badge/MySQL-8-lightblue?style=for-the-badge\&logo=mysql)
+
+**Server**
+![XAMPP](https://img.shields.io/badge/XAMPP-7.4-orange?style=for-the-badge\&logo=xampp)
 
 </div>
 
@@ -27,123 +30,114 @@
 
 ## 🌟 Project Overview
 
-A **full-stack intelligent learning platform** that tracks user behavior and provides **personalized resource recommendations** using a hybrid backend system.
+Culinary Haven is a **complete restaurant website** that helps both **customers and restaurant staff**:
 
-It combines:
-
-- Activity tracking system  
-- Recommendation engine  
-- Analytics dashboard  
-- Notification system  
-
-to deliver a **personalized learning experience for students**.
+* Customers can **view the menu**, **book tables**, and **leave reviews**.
+* Admins can **manage everything** from a **special dashboard**.
+* Fully **responsive** and works on **mobile devices**.
 
 ---
 
 ## ✨ Features
 
-### 👤 Authentication & Roles
-- Secure login system
-- Role-based access (Student / Admin)
-- Protected routes
+### For Users
 
----
+* **Home Page:** Background video, welcome message, table booking button
+* **Menu Section:**
 
-### 📚 Resource Management
-- Add and manage learning resources
-- Each resource contains:
-  - Name
-  - URL
-  - Category
-- Track resource views and engagement
+  * View all food items from database
+  * Filter vegetarian items
+  * Sort menu by name or price
+  * Choose price range using slider
+* **Gallery:** Food and restaurant images
+* **Reviews:** Submit and view recent reviews
+* **Chefs Section:** Lists top chefs with photos
 
----
+### Admin Panel
 
-### 🔥 Trending System
-- Automatically detects popular resources
-- Based on user interaction data
+* **Login System:** Only admin can log in using username and password
+* **Dashboard:** Shows total reservations, reviews, messages, and recent activities
+* **Manage Sections:**
 
----
-
-### 🧠 Recommendation System
-- Tracks user activity (views, clicks)
-- Suggests relevant resources dynamically
-- Personalized recommendations per user
-
----
-
-### 📊 Analytics Dashboard
-- User activity tracking
-- Resource engagement insights
-- Most viewed resources
-- System usage analytics
-
----
-
-### 🔔 Notification System
-- Notifications for:
-  - New resources
-  - New recommendations
-- Read / unread status support
-
----
-
+  * Reservations: View/update bookings
+  * Reviews: Approve/reject reviews
+  * Messages: Read customer messages
+  * Menu: Add/edit/remove items
 
 ---
 
 ## 📁 Project Structure
 
-
-/client
-├── src/components
-├── src/pages
-├── src/assets
-
-/backend
-├── routes
-├── controllers
-├── models
-
-/backend-ai
-├── app.py
-├── recommendation logic
+```
+CulinaryHaven/
+│
+├── admin/              # Admin panel files
+│   ├── add_menu_item.php            
+│   ├── admin_menu.php               
+│   ├── admin_messages.php          
+│   ├── admin_reservations.php       
+│   ├── admin_reviews.php
+│   ├── dashboard.php                
+│   ├── login.php                    
+│   └── logout.php            
+├── css/                   # Stylesheets
+│   └── style.css    
+├── js/                    # JavaScript files
+│   └── script.js    
+├── php/                   # Backend scripts
+│   ├── db/
+│   │   └── connection.php           
+│   |   ├── contact.php                
+│   ├── reservation.php              
+│   ├── review.php  
+├── includes/            # Reusable PHP files
+│   ├── footer.php                  
+│   └── header.php           
+├── index.php              # Home page
+├── cooking.mp4            # Background video
+├── generate_hash.php      # Hash generation script
+└── README.md
+```
 
 ---
 
-## ⚙️ Installation & Setup
 
-### 1️⃣ Clone Repository
+---
+
+## 🚀 Installation & Setup
+
+1. Clone the repository:
+
 ```bash
-git clone https://github.com/your-username/resource-recommendation-system.git
-cd resource-recommendation-system
----
-Start AI Backend (FastAPI)
-cd backend-ai
-uvicorn app:app --reload --port 8000
+git clone https://github.com/khushi519g5/CulinaryHaven.git
+cd CulinaryHaven
+```
+
+2. Install **XAMPP** and start **Apache** & **MySQL**.
+3. Import `restaurant_db.sql` into **phpMyAdmin**.
+4. Place the project folder in `htdocs`.
+5. Open `http://localhost/CulinaryHaven` in your browser.
 
 ---
-Start Main Backend (Node.js)
-cd backend
-npm start
+
+## 🎯 Usage
+
+* **Users:** Browse menu, filter items, book tables, view chefs & gallery, submit reviews.
+* **Admin:** Login via `admin/login.php` to manage reservations, reviews, messages, and menu items.
 
 ---
-Start Frontend (React)
-cd client
-npm start
+
+## 🌈 Support & Contribution
+
+* Give it a ⭐ star on GitHub if you like it
+* Feedback, suggestions, and contributions are welcome
+
+---
+
+## 👩‍💻 Author
+
+**Khushi Mittal** — [GitHub](https://github.com/khushi519g5)
+
+---
 
 
-🎯 Project Highlights
-Real-world recommendation system
-Hybrid architecture (Node.js + FastAPI)
-Activity-based personalization
-Analytics-driven insights
-Modular scalable design
-
-🚀 Future Improvements
-Real-time notifications (WebSockets)
-Machine learning-based recommendations
-Semantic search integration
-Email notifications system
-
-👩‍💻 Author
-Khushi Mittal
