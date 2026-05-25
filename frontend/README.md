@@ -1,16 +1,68 @@
-# React + Vite
+# 📚 Resource Recommendation System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> A full-stack intelligent learning platform that tracks user activity and recommends personalized educational resources using a behavior-driven recommendation engine, supported by analytics and notifications.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## React Compiler
+## 🚀 Live Overview
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+This project helps students discover relevant learning materials based on their interactions. It combines:
+- Activity tracking
+- Recommendation system
+- Analytics dashboard
+- Notification system
 
-## Expanding the ESLint configuration
+to create a **personalized learning experience**.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+
+## ✨ Key Features
+
+### 👤 Authentication & Roles
+- Secure login system
+- Role-based access (Student / Admin)
+- Protected routes
+
+
+
+### 📚 Resource Management
+- Add and manage learning resources
+- Each resource contains:
+  - Name
+  - URL
+  - Category (optional)
+- Track resource engagement (views)
+
+
+
+### 🔥 Trending System
+- Automatically identifies popular resources
+- Based on user views and interactions
+
+
+
+### 🧠 Recommendation Engine
+- Tracks user activity (views, interactions)
+- Suggests relevant resources dynamically
+- Personalized recommendations per user
+
+
+
+### 📊 Analytics Dashboard
+- User activity insights
+- Resource engagement statistics
+- Most viewed resources
+- System usage overview
+
+
+
+### 🔔 Notification System
+- Alerts for:
+  - New resources
+  - New recommendations
+- Read / Unread status tracking
+- Notification history per user
+
+
+
+## 🧠 System Architecture

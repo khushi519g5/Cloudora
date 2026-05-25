@@ -22,6 +22,25 @@ function Dashboard() {
   const [activeTab, setActiveTab] = useState(null);
   const [activeUserId, setActiveUserId] = useState(null);
   
+  const [recommendations, setRecommendations] = useState([]);
+
+const fetchRecommendations = async () => {
+  try {
+    const res = await axios.get(
+      "http://localhost:5000/api/recommendations"
+    );
+    setRecommendations(res.data.recommendations);
+  } catch (err) {
+    console.log("Failed to fetch recommendations:", err.message);
+  }
+};
+
+useEffect(() => {
+  if (user?._id) {
+    fetchRecommendations();
+  }
+}, [user]);
+
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -87,6 +106,32 @@ function Dashboard() {
   const filteredResources = resources.filter(res =>
     res.title.toLowerCase().includes(search.toLowerCase())
   );
+
+  const trackActivity = async (resourceId, action = "view") => {
+  try {
+    await axios.post("http://localhost:5000/api/track", {
+      resourceId,
+      action,
+    });
+
+    // 🔥 refresh recommendations after tracking
+    fetchRecommendations();
+
+  } catch (err) {
+    console.log("Tracking failed:", err.message);
+  }
+};
+
+const trackDownload = async (resourceId) => {
+  try {
+    await axios.post("http://localhost:5000/api/track", {
+      resourceId,
+      action: "download",
+    });
+  } catch (err) {
+    console.log("Download tracking failed:", err.message);
+  }
+};
 
   return (
     <div style={styles.page}>
@@ -281,17 +326,91 @@ function Dashboard() {
       <h4 style={styles.cardTitle}>{item.title}</h4>
       <p style={styles.cardDesc}>{item.description}</p>
 
-      <a
-        href={item.fileUrl}
-        target="_blank"
-        rel="noreferrer"
-        style={styles.primaryBtn}
-      >
-        <ExternalLink size={16} style={{ marginRight: "8px" }} />
-        Open File
-      </a>
+     <button
+  onClick={async () => {
+    await trackActivity(item._id, "view");
+    window.open(item.fileUrl, "_blank");
+  }}
+  style={styles.primaryBtn}
+>
+  <ExternalLink size={16} style={{ marginRight: "8px" }} />
+  Open File
+</button>
     </div>
   ))}
+</div>
+</div>
+<div style={{ marginTop: "30px" }}>
+
+ {/* Recommended Section */}
+<div style={styles.recoWrapper}>
+  <div style={styles.containerInner}>
+    <h3 style={styles.sectionHeader}>Recommended for You</h3>
+
+    <div style={styles.resourceGrid}>
+      {recommendations?.length > 0 ? (
+        recommendations.map((item, index) => (
+          <div
+            key={index}
+            style={styles.recoCard}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-6px) scale(1.02)";
+              e.currentTarget.style.boxShadow =
+                "0 15px 30px rgba(79, 70, 229, 0.15)";
+              e.currentTarget.style.border = "1px solid #4f46e5";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0) scale(1)";
+              e.currentTarget.style.boxShadow = "0 4px 10px rgba(0,0,0,0.05)";
+              e.currentTarget.style.border = "1px solid #e2e8f0";
+            }}
+          >
+           <div style={{ ...styles.cardHeader, justifyContent: "space-between" }}>
+  
+  {/* Left: icon */}
+  <img
+    src={bookIcon}
+    alt="resource icon"
+    style={styles.resourceEmoji}
+    onError={(e) => {
+      e.target.style.display = "none";
+    }}
+  />
+
+  {/* Right: badge */}
+  <span style={styles.authorBadge}>🔥 Trending</span>
+
+</div>
+
+            <h4 style={styles.cardTitle}>
+              {item.name || "Untitled Resource"}
+            </h4>
+
+            <p style={styles.cardDesc}>
+              👁 {item.views || 0} views
+            </p>
+
+            <button
+              style={styles.primaryBtn}
+              onClick={() => {
+                if (item.fileUrl) {
+                  window.open(item.fileUrl, "_blank");
+                } else {
+                  alert("File not available");
+                }
+              }}
+            >
+              View Details
+            </button>
+          </div>
+        ))
+      ) : (
+        <div style={{ color: "#64748b", textAlign: "center" }}>
+          No recommendations yet
+        </div>
+      )}
+    </div>
+  </div>
 </div>
 </div>
 
@@ -436,6 +555,73 @@ const styles = {
     fontWeight: "600",
     marginBottom: "15px"
   },
+  recoWrapper: {
+  width: "100%",
+  display: "flex",
+  justifyContent: "center",
+  marginTop: "30px",
+},
+
+containerInner: {
+  width: "100%",
+  maxWidth: "1100px",
+},
+
+recoGrid: {
+  display: "grid",
+  gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+  gap: "20px",
+  width: "100%",
+  maxWidth: "900px",
+},
+
+recoCard: {
+  backgroundColor: "#fff",
+  padding: "20px",
+  borderRadius: "1rem",
+  border: "1px solid #e2e8f0",
+  boxShadow: "0 4px 10px rgba(0,0,0,0.05)",
+  transition: "all 0.25s ease",
+  cursor: "pointer",
+},
+
+recoTop: {
+  display: "flex",
+  justifyContent: "center",
+  marginBottom: "10px",
+},
+
+trendingBadge: {
+  fontSize: "12px",
+  backgroundColor: "#fff7ed",
+  color: "#f97316",
+  padding: "4px 10px",
+  borderRadius: "999px",
+  fontWeight: "600",
+},
+
+recoTitle: {
+  fontSize: "16px",
+  fontWeight: "700",
+  color: "#1e293b",
+  marginBottom: "10px",
+},
+
+recoText: {
+  fontSize: "14px",
+  color: "#64748b",
+  marginBottom: "15px",
+},
+
+recoBtn: {
+  padding: "8px 12px",
+  backgroundColor: "#4f46e5",
+  color: "#fff",
+  border: "none",
+  borderRadius: "8px",
+  cursor: "pointer",
+  fontSize: "13px",
+},
   
   title: { fontSize: "32px", fontWeight: "800", color: "#1e293b", margin: 0 },
   name: { color: "#4f46e5" },

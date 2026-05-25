@@ -41,5 +41,5 @@ const resourceSchema = new mongoose.Schema({
   timestamps: true, // replaces createdAt automatically
 
 });
-
-module.exports = mongoose.model("Resource", resourceSchema);
+module.exports =
+  mongoose.models.Resource || mongoose.model("Resource", resourceSchema);
