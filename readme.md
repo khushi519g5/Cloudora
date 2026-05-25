@@ -112,20 +112,12 @@ It combines:
 
 ## 🖥️ UI Preview
 
-### Dashboard
-![Dashboard](./assets/dashboard.png)
-
-### Recommendations
-![Recommendations](./assets/recommendations.png)
-
-### Analytics
-![Analytics](./assets/analytics.png)
-
-### Askai
-![Analytics](./assets/askai.png)
-
-### Chat Section 
-![Analytics](./assets/chats.png)
+<p align="center">
+  <img src="frontend\src\assets\analytics.png" alt="ANALYTICS Page" width="300"/>  
+  <img src="frontend\src\assets\askai.png" alt="ASKAI Page" width="300"/>  
+  <img src="frontend\src\assets\dashboard.png" alt="dashboard page " width="300"/>
+  <img src="frontend\src\assets\recommendations.png" alt="Recommendation Page" width="300"/>
+</p>
 
 
 
