@@ -81,6 +81,13 @@ It combines:
 * LLM-powered contextual answers
 
 ---
+---
+
+### 💬 Real-time Chat System (WebSocket)
+- Live chat between users / admin (based on roles)
+- Built using WebSockets for real-time communication
+- Instant message delivery without page refresh
+- Persistent connection for low-latency interaction
 
 ## 🛠️ Tech Stack
 
@@ -94,6 +101,8 @@ It combines:
 
 ![Node.js](https://img.shields.io/badge/Node.js-Express-green?style=for-the-badge\&logo=node.js)
 ![FastAPI](https://img.shields.io/badge/FastAPI-Python-teal?style=for-the-badge\&logo=fastapi)
+![WebSocket](https://img.shields.io/badge/WebSocket-Realtime-orange?style=for-the-badge)
+![Socket.io](https://img.shields.io/badge/Socket.io-Realtime-black?style=for-the-badge&logo=socketdotio)
 
 ### Database
 
@@ -112,6 +121,11 @@ It combines:
 ### Analytics
 ![Analytics](./assets/analytics.png)
 
+### Askai
+![Analytics](./assets/askai.png)
+
+### Chat Section 
+![Analytics](./assets/chats.png)
 
 
 
