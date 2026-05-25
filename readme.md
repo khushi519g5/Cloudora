@@ -121,8 +121,8 @@ Cloudora/
 ### 1️⃣ Clone Repository
 
 ```bash
-git clone https://github.com/your-username/cloudora.git
-cd cloudora
+git clone https://github.com/your-username/cloud-student-resource-platform.git
+cd cloud-student-resource-platform
 ```
 
 ---
@@ -199,14 +199,6 @@ REACT_APP_API_URL=http://localhost:5000
 
 ---
 
-## ⚠️ Fixes Made
 
-* Fixed broken Markdown code blocks
-* Fixed badge rendering issues
-* Standardized folder tree formatting
-* Fixed inconsistent headings
-* Improved readability and spacing
-* Removed invalid horizontal rule breaks inside code blocks
 
----
 
