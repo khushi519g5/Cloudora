@@ -1,5 +1,6 @@
-# 📚 Cloudora
+---
 
+# 📚 Cloudora
 
 **Author:** Khushi Mittal
 
@@ -7,149 +8,206 @@
 
 ## 🚀 Overview
 
-A full-stack intelligent learning platform that tracks user activity and recommends personalized educational resources using a behavior-driven recommendation engine.
+Cloudora is a full-stack intelligent learning platform that tracks user activity and delivers personalized educational resources using a behavior-driven recommendation system.
 
-The system combines:
+It combines:
 
-Activity tracking
-Recommendation logic
-Analytics
-Notification system
-RAG-based retrieval for intelligent resource suggestions
+* Activity tracking
+* Recommendation engine
+* Analytics dashboard
+* Notification system
+* RAG-based document Q&A (AI assistant)
 
-It helps students discover relevant learning materials based on interactions and semantic similarity.
+---
 
 ## ✨ Key Features
 
 ### 👤 Authentication & Roles
-- Secure login system
-- Role-based access (Student / Admin)
-- Protected routes
+
+* Secure authentication system
+* Role-based access (Student / Admin)
+* Protected routes
 
 ---
 
 ### 📚 Resource Management
-- Add and manage learning resources
-- Each resource contains:
-  - Name
-  - URL
-  - Category (optional)
-- Tracks resource views and engagement
+
+* Add and manage learning resources
+* Fields:
+
+  * Name
+  * URL
+  * Category (optional)
+* Tracks views and engagement
 
 ---
 
 ### 🔥 Trending System
-- Identifies popular resources automatically
-- Based on user activity and views
+
+* Auto-detects popular resources
+* Based on user interactions and views
 
 ---
 
 ### 🧠 Recommendation System
-- Tracks user behavior (views, clicks)
-- Suggests relevant resources dynamically
-- Personalized recommendations per user
+
+* Tracks user behavior (clicks, views)
+* Generates personalized recommendations
+* Dynamic ranking of resources
 
 ---
 
 ### 📊 Analytics Dashboard
-- User activity insights
-- Resource engagement statistics
-- Most viewed resources
-- System usage tracking
+
+* User activity insights
+* Resource engagement metrics
+* Most viewed resources
+* System usage statistics
 
 ---
 
 ### 🔔 Notification System
-- New resource notifications
-- Recommendation alerts
-- Read / unread status support
+
+* New resource alerts
+* Recommendation notifications
+* Read / unread status support
 
 ---
 
-### 📄 RAG-based Document Q&A System
-Admin uploads PDF documents
-System processes and chunks documents
-Embedding-based retrieval finds relevant sections
-LLM answers user questions using selected document context
-Enables AskAI-style intelligent document interaction
+### 📄 RAG-based Document Q&A
 
+* Upload PDF documents (Admin)
+* Automatic chunking & embedding
+* Semantic search over documents
+* LLM-powered contextual answers
+
+---
 
 ## 🛠️ Tech Stack
 
 ### Frontend
-![React](https://img.shields.io/badge/React-18-blue?style=for-the-badge&logo=react)
-![Bootstrap](https://img.shields.io/badge/Bootstrap-5-purple?style=for-the-badge&logo=bootstrap)
+
+![React](https://img.shields.io/badge/React-18-blue?style=for-the-badge\&logo=react)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5-purple?style=for-the-badge\&logo=bootstrap)
 ![Axios](https://img.shields.io/badge/Axios-API-green?style=for-the-badge)
 
 ### Backend
-![Node.js](https://img.shields.io/badge/Node.js-Express-green?style=for-the-badge&logo=node.js)
-![FastAPI](https://img.shields.io/badge/FastAPI-Python-teal?style=for-the-badge&logo=fastapi)
+
+![Node.js](https://img.shields.io/badge/Node.js-Express-green?style=for-the-badge\&logo=node.js)
+![FastAPI](https://img.shields.io/badge/FastAPI-Python-teal?style=for-the-badge\&logo=fastapi)
 
 ### Database
-![MongoDB](https://img.shields.io/badge/MongoDB-Database-brightgreen?style=for-the-badge&logo=mongodb)
+
+![MongoDB](https://img.shields.io/badge/MongoDB-Database-brightgreen?style=for-the-badge\&logo=mongodb)
 
 ---
 
+## 📁 Project Structure
 
+```bash
 Cloudora/
-│── .idea/              # IDE configuration files
-│── Backend/            # Node.js main backend (APIs, auth, business logic)
-│── Backend-AI/         # Python/FastAPI AI backend (RAG / ML / AI services)
-│── Frontend/           # React frontend (UI, pages, components)
+│── Backend/            # Node.js backend (APIs, auth, logic)
+│── Backend-AI/         # FastAPI backend (RAG / AI services)
+│── Frontend/           # React frontend (UI)
+│── .idea/              # IDE config files
 │── package.json        # Root dependencies (if any)
-│── .gitignore          # Git ignored files
-│── README.md           # Project documentation
+│── .gitignore
+│── README.md
+```
+
+---
 
 ## ⚙️ Installation & Setup
 
 ### 1️⃣ Clone Repository
+
 ```bash
-git clone https://github.com/your-username/resource-recommendation-system.git
-cd resource-recommendation-system
+git clone https://github.com/your-username/cloudora.git
+cd cloudora
+```
+
 ---
-1. Start AI Backend (FastAPI)
-cd backend-ai
+
+### 2️⃣ Start AI Backend (FastAPI)
+
+```bash
+cd Backend-AI
 uvicorn app:app --reload --port 8000
+```
+
 ---
-2. Start Main Backend (Node.js)
-cd backend
+
+### 3️⃣ Start Main Backend (Node.js)
+
+```bash
+cd Backend
+npm install
 npm start
+```
+
 ---
-3. Start Frontend (React)
-cd frontend
+
+### 4️⃣ Start Frontend (React)
+
+```bash
+cd Frontend
+npm install
 npm run dev
+```
 
 ---
 
-###  🎯 Project Highlights
+## 🎯 Project Highlights
 
-Real-world recommendation system
-Hybrid backend architecture (Node + FastAPI)
-Activity-based personalization
-Analytics-driven insights
-Modular and scalable design
+* Real-world recommendation system
+* Hybrid architecture (Node.js + FastAPI)
+* Activity-based personalization
+* Analytics-driven insights
+* Modular and scalable design
 
+---
 
-🔐 Environment Variables
+## 🔐 Environment Variables
 
-Cloudora uses separate environment configurations for each service.
+### Backend (Node.js)
 
-📦 Backend (Node.js)
+Create `Backend/.env`:
 
-Create a .env file inside Backend/:
-
+```env
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret_key
+```
 
-🧠 Backend-AI (FastAPI)
+---
 
-Create a .env file inside Backend-AI/:
+### Backend-AI (FastAPI)
 
-OPENAI_API_KEY=your_openai_key_if_used
+Create `Backend-AI/.env`:
 
-🌐 Frontend (React)
+```env
+OPENAI_API_KEY=your_openai_key
+```
 
-Create a .env file inside Frontend/:
+---
 
+### Frontend (React)
+
+Create `Frontend/.env`:
+
+```env
 REACT_APP_API_URL=http://localhost:5000
+```
+
+---
+
+## ⚠️ Fixes Made
+
+* Fixed broken Markdown code blocks
+* Fixed badge rendering issues
+* Standardized folder tree formatting
+* Fixed inconsistent headings
+* Improved readability and spacing
+* Removed invalid horizontal rule breaks inside code blocks
+
+---
 
