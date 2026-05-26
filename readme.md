@@ -117,6 +117,7 @@ It combines:
   <img src="frontend\src\assets\askai.png" alt="ASKAI Page" width="500"/>  
   <img src="frontend\src\assets\dashboard.png" alt="dashboard page " width="500"/>
   <img src="frontend\src\assets\recommendations.png" alt="Recommendation Page" width="500"/>
+  <img src="frontend\src\assets\chats.png" alt="Chats Page" width="500"/>
 </p>
 
 
