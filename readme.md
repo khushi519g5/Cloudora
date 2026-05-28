@@ -65,13 +65,7 @@ It combines:
 
 ---
 
-### 🔔 Notification System
 
-* New resource alerts
-* Recommendation notifications
-* Read / unread status support
-
----
 
 ### 📄 RAG-based Document Q&A
 
