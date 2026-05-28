@@ -700,18 +700,29 @@ statValue: {
   chatWindow: {
     position: "fixed", bottom: "100px", right: "30px", width: "350px", height: "500px",
     backgroundColor: "#fff", borderRadius: "1.25rem", border: "1px solid #e2e8f0",
-    boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1)", zIndex: 1000, display: "flex", flexDirection: "column", overflow: "hidden"
+    boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1)",  zIndex: 9999, display: "flex", flexDirection: "column", overflow: "hidden"
   },
   chatHeader: { padding: "15px 20px", borderBottom: "1px solid #f1f5f9", display: "flex", justifyContent: "space-between", alignItems: "center", backgroundColor: "#f8fafc" },
   closeBtn: { background: "none", border: "none", cursor: "pointer", color: "#64748b" },
-  userList: { padding: "10px 15px", display: "flex", gap: "10px", overflowX: "auto", borderBottom: "1px solid #f1f5f9" },
+  userList: { padding: "10px 15px", display: "flex", gap: "10px",  overflowX: "auto",
+  minHeight: "60px",
+  flexShrink: 0, borderBottom: "1px solid #f1f5f9" },
   avatar: { 
     width: "40px", height: "40px", borderRadius: "50%", backgroundColor: "#f1f5f9", color: "#4f46e5",
     display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "700", cursor: "pointer", flexShrink: 0, transition: "0.2s"
   },
-  chatBody: { flex: 1, display: "flex", flexDirection: "column", padding: "15px" },
-  msgContainer: { flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: "10px", paddingBottom: "10px" },
-  bubble: { padding: "8px 14px", fontSize: "14px", maxWidth: "80%" },
+  chatBody: { flex: 1, display: "flex", flexDirection: "column", padding: "15px",minWidth: 0   },
+ msgContainer: {
+  flex: 1,
+  overflowY: "auto",
+  overflowX: "hidden",   // 🔥 removes horizontal scroll
+  display: "flex",
+  flexDirection: "column",
+  gap: "10px",
+  paddingBottom: "10px",
+},
+  bubble: { padding: "8px 14px", fontSize: "14px", maxWidth: "80%" , wordBreak: "break-word",   // 🔥 forces long text wrap
+  whiteSpace: "pre-wrap" },
   chatInputRow: { display: "flex", gap: "8px", paddingTop: "10px" },
   inputField: { flex: 1, padding: "8px 12px", borderRadius: "0.5rem", border: "1px solid #e2e8f0", outline: "none", fontSize: "14px" },
   sendButton: { backgroundColor: "#4f46e5", color: "#fff", border: "none", borderRadius: "0.5rem", width: "40px", height: "40px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" },

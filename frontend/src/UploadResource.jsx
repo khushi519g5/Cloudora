@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { Upload, FileText } from "lucide-react";
 
@@ -10,24 +10,30 @@ export default function UploadResource({ refreshResources }) {
     fileUrl: ""
   });
 
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value
-    });
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      // 1. Upload resource
       await axios.post("http://localhost:5000/api/resources/upload", {
         ...formData,
         uploadedBy: "admin123"
       });
 
-      // 2. Log activity (IMPORTANT)
       await axios.post("http://localhost:5000/api/activity", {
         message: `admin123 uploaded ${formData.title}`,
         type: "upload"
@@ -35,7 +41,6 @@ export default function UploadResource({ refreshResources }) {
 
       alert("Resource Uploaded Successfully!");
 
-      // reset form
       setFormData({
         title: "",
         description: "",
@@ -43,37 +48,32 @@ export default function UploadResource({ refreshResources }) {
         fileUrl: ""
       });
 
-      // refresh dashboard/resources
-      refreshResources();
+      if (refreshResources) refreshResources();
 
     } catch (error) {
-      console.error(error);
+      console.error("Upload error:", error);
       alert("Error uploading resource");
     }
   };
 
   return (
-    <div
-      style={styles.card}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.border = "1px solid #2563eb";
-        e.currentTarget.style.boxShadow =
-          "0 14px 30px rgba(37,99,235,0.18)";
-        e.currentTarget.style.transform = "translateY(-5px)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.border = "1px solid #4f46e5";
-        e.currentTarget.style.boxShadow =
-          "0 10px 25px -5px rgba(0,0,0,0.05)";
-        e.currentTarget.style.transform = "translateY(0)";
-      }}
-    >
+    <div style={{ ...styles.card, padding: isMobile ? "18px" : "25px" }}>
+      {/* HEADER */}
       <div style={styles.header}>
         <FileText size={18} />
         <h3 style={{ margin: 0 }}>Upload Resource</h3>
       </div>
 
-      <form onSubmit={handleSubmit} style={styles.form}>
+      {/* FORM */}
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          ...styles.form,
+          gridTemplateColumns: isMobile
+            ? "1fr"
+            : "repeat(auto-fit, minmax(220px, 1fr))"
+        }}
+      >
         <input
           name="title"
           placeholder="Title"
@@ -102,14 +102,21 @@ export default function UploadResource({ refreshResources }) {
 
         <input
           name="fileUrl"
-          placeholder="File URL"
+          placeholder="File URL (PDF only)"
           value={formData.fileUrl}
           onChange={handleChange}
           required
           style={styles.input}
         />
 
-        <button type="submit" style={styles.button}>
+        <button
+          type="submit"
+          style={{
+            ...styles.button,
+            gridColumn: isMobile ? "auto" : "span 2",
+            width: isMobile ? "100%" : "auto"
+          }}
+        >
           <Upload size={16} style={{ marginRight: 6 }} />
           Upload
         </button>
@@ -118,14 +125,13 @@ export default function UploadResource({ refreshResources }) {
   );
 }
 
-
- const styles = {
+/* ---------------- STYLES ---------------- */
+const styles = {
   card: {
     backgroundColor: "rgba(255,255,255,0.95)",
     backdropFilter: "blur(10px)",
     borderRadius: "1.25rem",
     border: "1px solid #4f46e5",
-    padding: "25px",
     boxShadow: "0 10px 25px -5px rgba(0,0,0,0.05)",
     transition: "all 0.3s ease",
     maxWidth: "900px",
@@ -144,11 +150,11 @@ export default function UploadResource({ refreshResources }) {
 
   form: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
     gap: "15px"
   },
 
   input: {
+    width: "100%",
     padding: "10px 14px",
     borderRadius: "0.75rem",
     border: "1px solid #e2e8f0",
@@ -159,7 +165,6 @@ export default function UploadResource({ refreshResources }) {
   },
 
   button: {
-    gridColumn: "span 2",
     padding: "12px",
     borderRadius: "0.75rem",
     border: "none",

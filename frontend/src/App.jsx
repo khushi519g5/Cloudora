@@ -1,27 +1,27 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
+
 import Signup from "./Signup.jsx";
 import Login from "./Login";
 import AdminCreateUser from "./AdminCreateUser.jsx";
 import AdminDashboard from "./AdminDashboard.jsx";
-import TeacherDashboard from "./TeacherDashboard.jsx";
 import StudentDashboard from "./StudentDashboard.jsx";
-import ProtectedRoute from "./ProtectedRoute.jsx";
 import AskAI from "./AskAI";
-import Navbar from './navbar.jsx';
 import AboutStudent from "./AboutStudent";
 import AboutAdmin from "./AboutAdmin";
 import AnalyticsDashboard from "./Anal_dash.jsx";
 
+import ProtectedRoute from "./ProtectedRoute.jsx";
 
 function App() {
   return (
     <Routes>
-      {/* Public Routes */}
+
+      {/* Public */}
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
 
-      {/* Role-Based Dashboards */}
+      {/* Admin only */}
       <Route
         path="/admin-dashboard"
         element={
@@ -30,17 +30,7 @@ function App() {
           </ProtectedRoute>
         }
       />
-      
-      <Route
-        path="/student-dashboard"
-        element={
-          <ProtectedRoute allowedRoles={["student",  "admin"]}>
-            <StudentDashboard />
-          </ProtectedRoute>
-        }
-      />
 
-      {/* Admin Create User */}
       <Route
         path="/admin/create-user"
         element={
@@ -50,23 +40,55 @@ function App() {
         }
       />
 
-      {/* Optional generic dashboard route */}
       <Route
-        path="/dashboard"
+        path="/analytics"
         element={
-          <ProtectedRoute>
-            <Navigate to="/student-dashboard" />
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <AnalyticsDashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/about-admin"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <AboutAdmin />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Student only */}
+      <Route
+        path="/student-dashboard"
+        element={
+          <ProtectedRoute allowedRoles={["student"]}>
+            <StudentDashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/about-student"
+        element={
+          <ProtectedRoute allowedRoles={["student"]}>
+            <AboutStudent />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Shared (only if needed) */}
+      <Route
+        path="/ask-ai"
+        element={
+          <ProtectedRoute allowedRoles={["student"]}>
+            <AskAI />
           </ProtectedRoute>
         }
       />
 
       {/* Default redirect */}
       <Route path="*" element={<Navigate to="/login" />} />
-      
-      <Route path="/ask-ai" element={<AskAI />} />
-       <Route path="/about-student" element={<AboutStudent />} />
-      <Route path="/about-admin" element={<AboutAdmin />} />
-       <Route path="/analytics" element={<AnalyticsDashboard />} />
     </Routes>
   );
 }
