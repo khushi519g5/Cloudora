@@ -23,8 +23,11 @@ function Login() {
       const token = res.data.token;
       localStorage.setItem("token", token);
 
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      const role = payload.role;
+     const payload = JSON.parse(atob(token.split('.')[1]));
+const role = payload.role;
+
+localStorage.setItem("token", token);
+localStorage.setItem("role", role);   // 🔥 ADD THIS
 
       setSuccess("Authentication successful. Redirecting...");
       
