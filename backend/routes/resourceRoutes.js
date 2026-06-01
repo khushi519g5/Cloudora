@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const Resource = require("../models/Resource");
+const createNotification = require("../utils/createNotification");
+
+
 
 // CREATE RESOURCE
 router.post("/upload", async (req, res) => {
@@ -16,12 +19,20 @@ router.post("/upload", async (req, res) => {
     });
 
     await newResource.save();
+     // ✅ ADD NOTIFICATION HERE
+    await createNotification({
+      title: "New Document Uploaded",
+      message: `${newResource.title} is now available`,
+      type: "upload",
+    });
+
 
     res.status(201).json({ message: "Resource uploaded successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
 
 // GET ALL RESOURCES
 router.get("/", async (req, res) => {
@@ -66,6 +77,11 @@ router.put("/:id", async (req, res) => {
     if (!updatedResource) {
       return res.status(404).json({ message: "Resource not found" });
     }
+     await createNotification({
+      title: "Document Updated",
+      message: `${updatedResource.title} has been updated`,
+      type: "update",
+    });
 
     res.json({
       message: "Resource updated successfully",

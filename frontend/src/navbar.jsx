@@ -7,6 +7,7 @@ import {
   LogOut,
   User
 } from "lucide-react";
+import NotificationBell from "./NotificationBell";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -90,7 +91,9 @@ function Navbar() {
               </Link>
             </li>
           </ul>
-
+          <div style={{ marginRight: "12px" }}>
+  <NotificationBell />
+</div>
           {/* 🔹 Right Section (User Card & Logout) */}
           <div className="d-flex align-items-center justify-content-between justify-content-lg-end gap-3 pt-3 pt-lg-0 border-top border-lg-0 mt-2 mt-lg-0">
             

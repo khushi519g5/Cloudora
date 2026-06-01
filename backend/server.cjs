@@ -14,6 +14,7 @@ const Message = require("./models/Message");
 const ragRoutes = require("./routes/ragRoutes");
 const activityRoutes = require("./routes/activityRoutes");
 const recommendationRoutes = require("./routes/recommendationRoutes");
+const notificationRoutes = require("./routes/notificationRoutes");
 
 
 
@@ -39,6 +40,8 @@ app.use("/api/messages", messageRoutes);
 app.use("/api/rag", ragRoutes);
 app.use("/api/activity", activityRoutes);
 app.use("/api", recommendationRoutes);
+
+app.use("/api/notifications", notificationRoutes);
 
 // 🔥 CREATE HTTP SERVER
 const server = http.createServer(app);
