@@ -75,6 +75,11 @@ It combines:
 * LLM-powered contextual answers
 
 ---
+### 🔔 Notification System
+
+* New resource alerts
+* update resource
+
 ---
 
 ### 💬 Real-time Chat System (WebSocket)
