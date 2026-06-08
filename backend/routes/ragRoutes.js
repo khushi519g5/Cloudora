@@ -14,7 +14,7 @@ router.post("/ingest", async (req, res) => {
       return res.status(404).json({ error: "Resource not found" });
     }
 
-    const count = await ingest(doc);
+    const count = await ingest(doc, doc._id);
 
     res.json({ message: "done", chunks: count });
   } catch (err) {

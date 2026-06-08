@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
+const API_URL = import.meta.env.VITE_API_URL;
 
 const AskAI = () => {
   const [question, setQuestion] = useState("");
@@ -9,6 +10,7 @@ const AskAI = () => {
   const [docs, setDocs] = useState([]);
   const [documentId, setDocumentId] = useState("");
   const [ingesting, setIngesting] = useState(false);
+
 
   // ---------------- MOBILE CHECK ----------------
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -23,7 +25,7 @@ const AskAI = () => {
   useEffect(() => {
     const fetchDocs = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/resources");
+       const res = await fetch(`${API_URL}/api/resources`);
         const data = await res.json();
         setDocs(data);
       } catch (err) {
@@ -39,7 +41,7 @@ const AskAI = () => {
     setIngesting(true);
 
     try {
-      const res = await fetch("http://localhost:5000/api/rag/ingest", {
+    const res = await fetch(`${API_URL}/api/rag/ingest`,{
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ resourceId: documentId }),
@@ -64,7 +66,7 @@ const AskAI = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/api/rag/ask", {
+     const res = await fetch(`${API_URL}/api/rag/ask`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question, documentId }),

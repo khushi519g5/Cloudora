@@ -10,6 +10,8 @@ import {
 import bookIcon from "./assets/notes.png";
 import HomeIcon from "./assets/house.png";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function Dashboard() {
   const [user, setUser] = useState(null);
   const [resources, setResources] = useState([]);
@@ -26,9 +28,9 @@ function Dashboard() {
 
 const fetchRecommendations = async () => {
   try {
-    const res = await axios.get(
-      "http://localhost:5000/api/recommendations"
-    );
+   const res = await axios.get(
+  `${API_URL}/api/recommendations`
+);
     setRecommendations(res.data.recommendations);
   } catch (err) {
     console.log("Failed to fetch recommendations:", err.message);
@@ -47,13 +49,17 @@ useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem("token");
       try {
-        const [resContent, resProfile, resUsers] = await Promise.all([
-          axios.get("http://localhost:5000/api/resources"),
-          axios.get("http://localhost:5000/api/auth/profile", {
-            headers: { Authorization: `Bearer ${token}` }
-          }),
-          axios.get("http://localhost:5000/api/auth/users")
-        ]);
+       const [resContent, resProfile, resUsers] = await Promise.all([
+  axios.get(`${API_URL}/api/resources`),
+
+  axios.get(`${API_URL}/api/auth/profile`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }),
+
+  axios.get(`${API_URL}/api/auth/users`)
+]);
         setResources(resContent.data);
         setUser(resProfile.data.user);
         setUsers(resUsers.data);
@@ -76,7 +82,7 @@ useEffect(() => {
   useEffect(() => {
     if (!selectedUser || !user) return;
     const currentUserId = user?._id || user?.id;
-    axios.get(`http://localhost:5000/api/messages/${currentUserId}/${selectedUser._id}`)
+    axios.get(`${API_URL}/api/messages/${currentUserId}/${selectedUser._id}`)
       .then(res => setMessages(res.data))
       .catch(err => console.log(err));
   }, [selectedUser, user]);
@@ -109,7 +115,7 @@ useEffect(() => {
 
   const trackActivity = async (resourceId, action = "view") => {
   try {
-    await axios.post("http://localhost:5000/api/track", {
+    await axios.post(`${API_URL}/api/track`, {
       resourceId,
       action,
     });
@@ -124,7 +130,7 @@ useEffect(() => {
 
 const trackDownload = async (resourceId) => {
   try {
-    await axios.post("http://localhost:5000/api/track", {
+    await axios.post(`${API_URL}/api/track`, {
       resourceId,
       action: "download",
     });
@@ -711,7 +717,14 @@ statValue: {
     width: "40px", height: "40px", borderRadius: "50%", backgroundColor: "#f1f5f9", color: "#4f46e5",
     display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "700", cursor: "pointer", flexShrink: 0, transition: "0.2s"
   },
-  chatBody: { flex: 1, display: "flex", flexDirection: "column", padding: "15px",minWidth: 0   },
+  chatBody: {
+  flex: 1,
+  display: "flex",
+  flexDirection: "column",
+  padding: "15px",
+  minWidth: 0,
+  minHeight: 0
+},
  msgContainer: {
   flex: 1,
   overflowY: "auto",

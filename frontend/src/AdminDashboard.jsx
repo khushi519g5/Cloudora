@@ -8,6 +8,7 @@ import {
   MessageCircle, ExternalLink, GraduationCap, Layout 
 } from "lucide-react";
 import Navbar from './admin_navbar';
+const API_URL = import.meta.env.VITE_API_URL;
 
 
 
@@ -28,7 +29,7 @@ const [user, setUser] = useState(null);
   // FETCH RESOURCES
   const refreshResources = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/resources");
+     const res = await axios.get(`${API_URL}/api/resources`);
       setResources(res.data);
     } catch (error) {
       console.error(error);
@@ -39,7 +40,9 @@ useEffect(() => {
   const fetchProfile = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:5000/api/auth/profile", {
+     const res = await axios.get(
+  `${API_URL}/api/auth/profile`,
+   {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUser(res.data.user);
@@ -52,10 +55,11 @@ useEffect(() => {
 
 // 🔹 Fetch all users
 useEffect(() => {
-  axios.get("http://localhost:5000/api/auth/users")
+  axios.get(`${API_URL}/api/auth/users`)
     .then(res => setUsers(res.data))
     .catch(err => console.log(err));
 }, []);
+
 
   useEffect(() => {
     refreshResources();
@@ -74,7 +78,7 @@ useEffect(() => {
     if (!confirmDelete) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/resources/${id}`);
+     await axios.delete(`${API_URL}/api/resources/${id}`);
       setResources(resources.filter((r) => r._id !== id));
       setSelectedResources((prev) => prev.filter((r) => r !== id));
     } catch (error) {
@@ -94,7 +98,7 @@ useEffect(() => {
   const currentUserId = user?._id || user?.id;
 
   axios
-    .get(`http://localhost:5000/api/messages/${currentUserId}/${selectedUser._id}`)
+   .get(`${API_URL}/api/messages/${currentUserId}/${selectedUser._id}`)
     .then(res => setMessages(res.data))
     .catch(err => console.log(err));
 
@@ -136,7 +140,7 @@ const sendMessage = () => {
     if (!confirmDelete) return;
 
     try {
-      await Promise.all(selectedResources.map((id) => axios.delete(`http://localhost:5000/api/resources/${id}`)));
+      await Promise.all(selectedResources.map((id) => axios.delete(`${API_URL}/api/resources/${id}`)));
       setResources(resources.filter((r) => !selectedResources.includes(r._id)));
       setSelectedResources([]);
     } catch (error) {
@@ -308,182 +312,94 @@ const sendMessage = () => {
       </div>
 
       {/* ... Chat logic ... */}
-      {/* CHAT FAB */}
-
-      <button style={styles.chatFab} onClick={() => setShowChat(!showChat)}>
-
-        {showChat ? <X size={28} /> : <MessageCircle size={28} />}
-
-      </button>
-
-
-
-      {/* CHAT WIDGET - Matches Login Card Style */}
-
-      {showChat && (
-
-        <div style={styles.chatWindow}>
-
-          <div style={styles.chatHeader}>
-
-            <h5 style={{ margin: 0, fontWeight: 700 }}>Peer Messenger</h5>
-
-            <button style={styles.closeBtn} onClick={() => setShowChat(false)}><X size={18}/></button>
-
-          </div>
-
-
-
-          <div style={styles.userList}>
-
-            {users.filter(u => u._id !== (user?._id || user?.id)).map(u => (
-
-            <div
-
-  key={u._id}
-
-  style={{
-
-    ...styles.avatar,
-
-    width: "auto",
-
-    padding: "0 10px",
-
-    border: selectedUser?._id === u._id
-
-      ? "2px solid #4f46e5"
-
-      : "2px solid transparent",
-
-    transform: selectedUser?._id === u._id
-
-      ? "scale(1.05)"
-
-      : "scale(1)"
-
-  }}
-
-  onClick={() => setSelectedUser(u)}
-
-  title={u.name}
-
->
-
-  <span
-
-  style={{
-
-    fontSize: "12px",
-
-    fontWeight: 600,
-
-    whiteSpace: "nowrap",
-
-    overflow: "hidden",
-
-    textOverflow: "ellipsis",
-
-    maxWidth: "120px",
-
-    display: "inline-block"
-
-  }}
-
->
-
-  {u.name}
-
-</span>
-
-</div>
-
-            ))}
-
-          </div>
-
-
-
-          <div style={styles.chatBody}>
-
-            {selectedUser ? (
-
-              <>
-
-                <div style={styles.msgContainer}>
-
-                  {messages.map((msg, i) => {
-
-                    const isMe = msg.senderId?.toString() === (user?._id || user?.id);
-
-                    return (
-
-                      <div key={i} style={{
-
-                        ...styles.bubble,
-
-                        alignSelf: isMe ? 'flex-end' : 'flex-start',
-
-                        backgroundColor: isMe ? '#4f46e5' : '#f1f5f9',
-
-                        color: isMe ? '#fff' : '#1e293b',
-
-                        borderRadius: isMe ? '12px 12px 2px 12px' : '12px 12px 12px 2px'
-
-                      }}>
-
-                        {msg.message}
-
-                      </div>
-
-                    );
-
-                  })}
-
-                  <div ref={scrollRef} />
-
-                </div>
-
-                <div style={styles.chatInputRow}>
-
-                  <input
-
-                    value={input}
-
-                    onChange={(e) => setInput(e.target.value)}
-
-                    onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-
-                    style={styles.inputField}
-
-                    placeholder="Type here..."
-
-                  />
-
-                  <button style={styles.sendButton} onClick={sendMessage}><Send size={16} /></button>
-
-                </div>
-
-              </>
-
-            ) : (
-
-              <div style={styles.emptyState}>Select a user to chat</div>
-
-            )}
-
-          </div>
-
-        </div>
-
-      )}
-
-    </div>
-
-  );
-
-}
-
+       {/* CHAT FAB */}
+           <button style={styles.chatFab} onClick={() => setShowChat(!showChat)}>
+             {showChat ? <X size={28} /> : <MessageCircle size={28} />}
+           </button>
+     
+           {/* CHAT WIDGET - Matches Login Card Style */}
+           {showChat && (
+             <div style={styles.chatWindow}>
+               <div style={styles.chatHeader}>
+                 <h5 style={{ margin: 0, fontWeight: 700 }}>Peer Messenger</h5>
+                 <button style={styles.closeBtn} onClick={() => setShowChat(false)}><X size={18}/></button>
+               </div>
+     
+               <div style={styles.userList}>
+                 {users.filter(u => u._id !== (user?._id || user?.id)).map(u => (
+                 <div
+       key={u._id}
+       style={{
+         ...styles.avatar,
+         width: "auto",
+         padding: "0 10px",
+         border: selectedUser?._id === u._id
+           ? "2px solid #4f46e5"
+           : "2px solid transparent",
+         transform: selectedUser?._id === u._id
+           ? "scale(1.05)"
+           : "scale(1)"
+       }}
+       onClick={() => setSelectedUser(u)}
+       title={u.name}
+     >
+       <span
+       style={{
+         fontSize: "12px",
+         fontWeight: 600,
+         whiteSpace: "nowrap",
+         overflow: "hidden",
+         textOverflow: "ellipsis",
+         maxWidth: "120px",
+         display: "inline-block"
+       }}
+     >
+       {u.name}
+     </span>
+     </div>
+                 ))}
+               </div>
+     
+               <div style={styles.chatBody}>
+                 {selectedUser ? (
+                   <>
+                     <div style={styles.msgContainer}>
+                       {messages.map((msg, i) => {
+                         const isMe = msg.senderId?.toString() === (user?._id || user?.id);
+                         return (
+                           <div key={i} style={{
+                             ...styles.bubble,
+                             alignSelf: isMe ? 'flex-end' : 'flex-start',
+                             backgroundColor: isMe ? '#4f46e5' : '#f1f5f9',
+                             color: isMe ? '#fff' : '#1e293b',
+                             borderRadius: isMe ? '12px 12px 2px 12px' : '12px 12px 12px 2px'
+                           }}>
+                             {msg.message}
+                           </div>
+                         );
+                       })}
+                       <div ref={scrollRef} />
+                     </div>
+                     <div style={styles.chatInputRow}>
+                       <input
+                         value={input}
+                         onChange={(e) => setInput(e.target.value)}
+                         onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                         style={styles.inputField}
+                         placeholder="Type here..."
+                       />
+                       <button style={styles.sendButton} onClick={sendMessage}><Send size={16} /></button>
+                     </div>
+                   </>
+                 ) : (
+                   <div style={styles.emptyState}>Select a user to chat</div>
+                 )}
+               </div>
+             </div>
+           )}
+         </div>
+       );
+     }
 
 
 function AdminResourceCard({
@@ -510,10 +426,10 @@ function AdminResourceCard({
   const handleUpdate = async () => {
     try {
 
-      await axios.put(
-        `http://localhost:5000/api/resources/${resource._id}`,
-        formData
-      );
+     await axios.put(
+  `${API_URL}/api/resources/${resource._id}`,
+  formData
+);
 
       alert("Resource updated successfully");
 
@@ -756,18 +672,50 @@ searchBar: {
   },
 
   // Chat (Matches Ref 1)
-  chatFab: { position: "fixed", bottom: "30px", right: "30px", width: "60px", height: "60px", borderRadius: "50%", backgroundColor: "#4f46e5", color: "#fff", border: "none", boxShadow: "0 10px 15px -3px rgba(79, 70, 229, 0.4)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 },
-  chatWindow: { position: "fixed", bottom: "100px", right: "30px", width: "350px", height: "500px", backgroundColor: "#fff", borderRadius: "1.25rem", border: "1px solid #e2e8f0", boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1)", zIndex: 1000, display: "flex", flexDirection: "column", overflow: "hidden" },
+   chatFab: {
+    position: "fixed", bottom: "30px", right: "30px", width: "60px", height: "60px",
+    borderRadius: "50%", backgroundColor: "#4f46e5", color: "#fff", border: "none", cursor: "pointer",
+    boxShadow: "0 10px 15px -3px rgba(79, 70, 229, 0.4)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center"
+  },
+  chatWindow: {
+    position: "fixed", bottom: "100px", right: "30px", width: "350px", height: "500px",
+    backgroundColor: "#fff", borderRadius: "1.25rem", border: "1px solid #e2e8f0",
+    boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1)",  zIndex: 9999, display: "flex", flexDirection: "column", overflow: "hidden"
+  },
   chatHeader: { padding: "15px 20px", borderBottom: "1px solid #f1f5f9", display: "flex", justifyContent: "space-between", alignItems: "center", backgroundColor: "#f8fafc" },
-  userList: { padding: "10px 15px", display: "flex", gap: "10px", overflowX: "auto", borderBottom: "1px solid #f1f5f9" },
-  avatar: { padding: "0 10px", borderRadius: "12px", backgroundColor: "#f1f5f9", color: "#4f46e5", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "700", cursor: "pointer" },
-  chatBody: { flex: 1, display: "flex", flexDirection: "column", padding: "15px" },
-  msgContainer: { flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: "10px" },
-  bubble: { padding: "8px 14px", fontSize: "14px", maxWidth: "80%" },
+  closeBtn: { background: "none", border: "none", cursor: "pointer", color: "#64748b" },
+  userList: { padding: "10px 15px", display: "flex", gap: "10px",  overflowX: "auto",
+  minHeight: "60px",
+  flexShrink: 0, borderBottom: "1px solid #f1f5f9" },
+  avatar: { 
+    width: "40px", height: "40px", borderRadius: "50%", backgroundColor: "#f1f5f9", color: "#4f46e5",
+    display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "700", cursor: "pointer", flexShrink: 0, transition: "0.2s"
+  },
+  chatBody: {
+  flex: 1,
+  display: "flex",
+  flexDirection: "column",
+  padding: "15px",
+  minWidth: 0,
+  minHeight: 0
+},
+ msgContainer: {
+  flex: 1,
+  overflowY: "auto",
+  overflowX: "hidden",   // 🔥 removes horizontal scroll
+  display: "flex",
+  flexDirection: "column",
+  gap: "10px",
+  paddingBottom: "10px",
+},
+  bubble: { padding: "8px 14px", fontSize: "14px", maxWidth: "80%" , wordBreak: "break-word",   // 🔥 forces long text wrap
+  whiteSpace: "pre-wrap" },
   chatInputRow: { display: "flex", gap: "8px", paddingTop: "10px" },
-  inputField: { flex: 1, padding: "8px 12px", borderRadius: "0.5rem", border: "1px solid #e2e8f0", outline: "none" },
-  sendButton: { backgroundColor: "#4f46e5", color: "#fff", border: "none", borderRadius: "0.5rem", width: "40px", height: "40px" },
-  editBtn: {
+  inputField: { flex: 1, padding: "8px 12px", borderRadius: "0.5rem", border: "1px solid #e2e8f0", outline: "none", fontSize: "14px" },
+  sendButton: { backgroundColor: "#4f46e5", color: "#fff", border: "none", borderRadius: "0.5rem", width: "40px", height: "40px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" },
+  emptyState: { flex: 1, display: "flex", alignItems: "center", justifyContent: "center", color: "#94a3b8", fontSize: "14px" },
+
+ editBtn: {
   flex: 1,
   padding: "10px",
   backgroundColor: "#4f46e5",
@@ -796,14 +744,7 @@ buttonRow: {
   marginTop: "15px"
 },
 
-input: {
-  width: "100%",
-  padding: "10px",
-  borderRadius: "0.5rem",
-  border: "1px solid #cbd5e1",
-  marginBottom: "10px",
-  outline: "none"
-},
+
 
 textarea: {
   width: "100%",

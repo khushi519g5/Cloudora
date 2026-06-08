@@ -10,6 +10,7 @@ import {
   BarChart3,
   Activity,
 } from "lucide-react";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function AnalyticsDashboard() {
   const [topResources, setTopResources] = useState([]);
@@ -25,7 +26,7 @@ export default function AnalyticsDashboard() {
   useEffect(() => {
     const fetchActivities = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/activity");
+       const res = await fetch(`${API_URL}/api/activity`);
         const data = await res.json();
         setActivities(data);
       } catch (err) {
@@ -40,7 +41,7 @@ export default function AnalyticsDashboard() {
   // FETCH RESOURCES & PIE DATA
   const fetchResources = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/resources/");
+    const res = await fetch(`${API_URL}/api/resources/`);
       const data = await res.json();
       const formatted = data.map((item) => ({
         name: item.title,

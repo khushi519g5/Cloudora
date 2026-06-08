@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function ViewResources({
   resources,
@@ -14,7 +15,7 @@ export default function ViewResources({
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/resources/${id}`);
+   await axios.delete(`${API_URL}/api/resources/${id}`);
       setResources(resources.filter((r) => r._id !== id));
     } catch (error) { console.error(error); }
   };
@@ -30,7 +31,7 @@ export default function ViewResources({
 
   const handleUpdate = async (id) => {
     try {
-      const res = await axios.put(`http://localhost:5000/api/resources/${id}`, formData);
+      const res = await axios.put(`${API_URL}/api/resources/${id}`, formData);
       setResources(resources.map((r) => (r._id === id ? res.data : r)));
       setEditId(null);
     } catch (error) { console.error(error); }

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Upload, FileText } from "lucide-react";
+const API_URL = import.meta.env.VITE_API_URL;
+import { jwtDecode } from "jwt-decode";
 
 export default function UploadResource({ refreshResources }) {
   const [formData, setFormData] = useState({
@@ -9,6 +11,36 @@ export default function UploadResource({ refreshResources }) {
     subject: "",
     fileUrl: ""
   });
+const [user, setUser] = useState(null);
+
+
+
+useEffect(() => {
+  const fetchUser = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const decoded = jwtDecode(token);
+
+      const res = await axios.get(
+        `${API_URL}/api/auth/users`
+      );
+
+      const currentUser = res.data.find(
+        (u) => u._id === decoded.id
+      );
+
+      setUser(currentUser);
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  fetchUser();
+}, []);
+
+// console.log(user);
 
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
@@ -28,14 +60,15 @@ export default function UploadResource({ refreshResources }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    console.log("USER =", user);
     try {
-      await axios.post("http://localhost:5000/api/resources/upload", {
+      await axios.post( `${API_URL}/api/resources/upload`, {
         ...formData,
-        uploadedBy: "admin123"
+       uploadedBy: user?.name
       });
 
-      await axios.post("http://localhost:5000/api/activity", {
-        message: `admin123 uploaded ${formData.title}`,
+      await axios.post(`${API_URL}/api/activity`, {
+        message: `${user?.name} uploaded ${formData.title}`,
         type: "upload"
       });
 

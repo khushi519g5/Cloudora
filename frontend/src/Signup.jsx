@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+const API_URL = import.meta.env.VITE_API_URL;
 
 function Signup() {
   const navigate = useNavigate();
@@ -25,10 +26,10 @@ function Signup() {
   setLoading(true);
 
   try {
-    const res = await axios.post(
-      "http://localhost:5000/api/auth/signup",
-      form
-    );
+  const res = await axios.post(
+    `${API_URL}/api/auth/signup`,
+    form
+  );
 
     const token = res.data.token;
     localStorage.setItem("token", token);

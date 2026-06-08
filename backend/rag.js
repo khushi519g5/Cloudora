@@ -124,6 +124,9 @@ const query = async (question, documentId) => {
       path: "embedding",
       numCandidates: 100,
       limit: 5,
+      filter: {
+        documentId: new mongoose.Types.ObjectId(documentId)
+      }
     },
   },
 ]);

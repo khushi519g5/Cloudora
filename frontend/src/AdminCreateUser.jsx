@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { UserPlus, ShieldCheck } from "lucide-react";
 import Navbar from "./admin_navbar";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function AdminCreateUser() {
   const token = localStorage.getItem("token");
@@ -22,7 +23,7 @@ export default function AdminCreateUser() {
 
     try {
       await axios.post(
-        "http://localhost:5000/api/admin/create-user",
+        `${API_URL}/api/admin/create-user`,
         {
           name,
           email,
