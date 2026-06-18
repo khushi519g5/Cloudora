@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Activity = require("../models/Activity");
+const Activity = require("../models/activity");
 
 // GET ALL ACTIVITY
 router.get("/", async (req, res) => {
