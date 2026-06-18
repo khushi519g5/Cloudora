@@ -34,7 +34,14 @@ app.add_middleware(
 # --------------------
 # MODEL LOAD
 # --------------------
-model = sentence_transformers.SentenceTransformer("all-MiniLM-L6-v2")
+model = None
+
+@app.on_event("startup")
+def startup_event():
+    global model
+    print("Loading model...")
+    model = sentence_transformers.SentenceTransformer("all-MiniLM-L6-v2")
+    print("Model loaded")
 
 # --------------------
 # REQUEST SCHEMAS
