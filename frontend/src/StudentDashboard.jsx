@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import socket from "./socket";
-import Navbar from './Navbar';
+import Navbar from './navbar';
 import { 
   Search, BookOpen, Users, Send, X, 
   MessageCircle, ExternalLink, GraduationCap, Layout 
