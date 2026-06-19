@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "./navbar";
 const API_URL = import.meta.env.VITE_API_URL;
+const RAG_URL = import.meta.env.VITE_RAG_URL;
 
 const AskAI = () => {
   const [question, setQuestion] = useState("");
@@ -41,7 +42,7 @@ const AskAI = () => {
     setIngesting(true);
 
     try {
-    const res = await fetch(`${API_URL}/api/rag/ingest`,{
+    const res = await fetch(`${RAG_URL}/api/rag/ingest`,{
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ resourceId: documentId }),
@@ -66,7 +67,7 @@ const AskAI = () => {
     setLoading(true);
 
     try {
-     const res = await fetch(`${API_URL}/api/rag/ask`, {
+     const res = await fetch(`${RAG_URL}/api/rag/ask`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question, documentId }),
