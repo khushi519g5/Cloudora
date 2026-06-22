@@ -2,6 +2,7 @@ const axios = require("axios");
 const pdfParse = require("pdf-parse");
 const Chunk = require("./models/Chunk");
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 // --------------------
 // FETCH FILE
@@ -61,7 +62,7 @@ const chunkText = (text, maxLen = 500) => {
 // EMBEDDING
 // --------------------
 const getEmbedding = async (text) => {
-  const res = await axios.post("http://localhost:8000/embed", {
+  const res = await axios.post(`${process.env.RAG_URL}/embed`, {
     text,
   });
 
@@ -140,15 +141,25 @@ const query = async (question, documentId) => {
 
   const context = results.map((r) => r.text).join("\n");
 
-  const llmRes = await axios.post("http://localhost:8000/ask", {
-    question,
-    context,
-  });
+  const Groq = require("groq-sdk");
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-  return {
-    answer: llmRes.data.answer,
-    sources: results,
-  };
+const llmRes = await groq.chat.completions.create({
+  model: "llama-3.3-70b-versatile",
+  messages: [
+    {
+      role: "user",
+      content: `Context:\n${context}\n\nQuestion:\n${question}`
+    }
+  ]
+});
+
+return {
+  answer: llmRes.choices[0].message.content,
+  sources: results
+};
+
+  
 };
 
 module.exports = { ingest, query };

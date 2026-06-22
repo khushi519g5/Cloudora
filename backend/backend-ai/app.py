@@ -64,30 +64,3 @@ def embed(req: EmbedRequest):
 # --------------------
 # LLM ENDPOINT
 # --------------------
-@app.post("/ask")
-def ask(req: AskRequest):
-
-    prompt = f"""
-You are an AI assistant.
-
-Use ONLY the context below.
-
-Context:
-{req.context}
-
-Question:
-{req.question}
-
-Answer clearly and concisely:
-"""
-
-    response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
-        messages=[
-            {"role": "user", "content": prompt}
-        ]
-    )
-
-    return {
-        "answer": response.choices[0].message.content
-    }
