@@ -9,7 +9,11 @@ import groq # type: ignore
 # --------------------
 # LOAD ENV
 # --------------------
-dotenv.load_dotenv()
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ENV_PATH = os.path.join(BASE_DIR, ".env")
+
+dotenv.load_dotenv(dotenv_path=ENV_PATH)
+
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 if not GROQ_API_KEY:
