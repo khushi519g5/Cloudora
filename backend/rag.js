@@ -62,9 +62,15 @@ const chunkText = (text, maxLen = 500) => {
 // EMBEDDING
 // --------------------
 const getEmbedding = async (text) => {
-  const res = await axios.post(`${process.env.RAG_URL}/embed`, {
-    text,
-  });
+  if (!process.env.EMBED_API_URL) {
+    throw new Error("EMBED_API_URL is not defined in environment variables");
+  }
+
+  const res = await axios.post(
+    process.env.EMBED_API_URL,
+    { text },
+    { timeout: 20000 }
+  );
 
   return res.data.embedding;
 };
@@ -86,9 +92,11 @@ const ingest = async (document) => {
     const chunks = chunkText(text);
     console.log("STEP 5: chunks", chunks.length);
 
-    const embeddings = await Promise.all(
-      chunks.map((c) => getEmbedding(c))
-    );
+    const embeddings = [];
+
+for (const c of chunks) {
+  embeddings.push(await getEmbedding(c));
+}
     console.log("STEP 6: embeddings done");
 
     const docs = chunks.map((c, i) => ({
