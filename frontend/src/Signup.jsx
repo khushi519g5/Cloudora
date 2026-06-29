@@ -74,48 +74,20 @@ export default function Signup() {
       backdropFilter: "blur(10px)",
       boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
     },
-    iconCircle: {
-      width: "70px",
-      height: "70px",
-      backgroundColor: "#f1f5f9",
-      borderRadius: "50%",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      margin: "0 auto 10px auto",
-    },
     input: {
-      padding: "0.75rem 1rem",
+      width: "100%",
+      padding: "0.75rem",
+      marginBottom: "10px",
       borderRadius: "0.5rem",
       border: "1px solid #e2e8f0",
-      fontSize: "0.95rem",
-      width: "100%",
-      marginBottom: "10px",
     },
     button: {
       width: "100%",
       padding: "0.75rem",
       backgroundColor: "#4f46e5",
+      color: "white",
       border: "none",
       borderRadius: "0.5rem",
-      color: "white",
-      fontWeight: "bold",
-      cursor: "pointer",
-    },
-    buttonLoading: {
-      width: "100%",
-      padding: "0.75rem",
-      backgroundColor: "#818cf8",
-      border: "none",
-      borderRadius: "0.5rem",
-      color: "white",
-      cursor: "not-allowed",
-    },
-    alert: {
-      borderRadius: "0.5rem",
-      fontSize: "0.85rem",
-      padding: "8px",
-      marginBottom: "10px",
     },
   };
 
@@ -123,67 +95,17 @@ export default function Signup() {
     <div style={styles.pageWrapper}>
       <div style={styles.card}>
 
-        {/* Header */}
-        <div className="text-center mb-4">
-          <div style={styles.iconCircle}>
-            <img
-              src="/image.png"
-              alt="Logo"
-              style={{ width: "40px" }}
-            />
-          </div>
+        <h2>Create Account</h2>
 
-          <h2>Create Account</h2>
-          <p>Join the Student Management System</p>
-        </div>
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        {success && <p style={{ color: "green" }}>{success}</p>}
 
-        {/* Messages */}
-        {error && (
-          <div style={{ ...styles.alert, background: "#fee2e2", color: "#b91c1c" }}>
-            {error}
-          </div>
-        )}
-
-        {success && (
-          <div style={{ ...styles.alert, background: "#dcfce7", color: "#166534" }}>
-            {success}
-          </div>
-        )}
-
-        {/* Form */}
         <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            onChange={handleChange}
-            style={styles.input}
-            required
-          />
+          <input name="name" placeholder="Name" onChange={handleChange} style={styles.input} />
+          <input name="email" placeholder="Email" onChange={handleChange} style={styles.input} />
+          <input name="password" type="password" placeholder="Password" onChange={handleChange} style={styles.input} />
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Email Address"
-            onChange={handleChange}
-            style={styles.input}
-            required
-          />
-
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            onChange={handleChange}
-            style={styles.input}
-            required
-          />
-
-          <button
-            type="submit"
-            disabled={loading}
-            style={loading ? styles.buttonLoading : styles.button}
-          >
+          <button type="submit" style={styles.button} disabled={loading}>
             {loading ? "Creating..." : "Sign Up"}
           </button>
         </form>
