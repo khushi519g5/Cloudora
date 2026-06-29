@@ -77,7 +77,7 @@ function App() {
         }
       />
 
-      {/* Shared (only if needed) */}
+      {/* Shared */}
       <Route
         path="/ask-ai"
         element={
@@ -89,6 +89,7 @@ function App() {
 
       {/* Default redirect */}
       <Route path="*" element={<Navigate to="/login" />} />
+
     </Routes>
   );
 }
