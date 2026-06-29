@@ -196,26 +196,22 @@ Create `Backend/.env`:
 ```env
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret_key
-```
-
----
-
-### Backend-AI (FastAPI)
-
-Create `Backend-AI/.env`:
-
-```env
+RAG_URL=http://localhost:8000
 OPENAI_API_KEY=your_openai_key
+EMBED_API_URL=http://localhost:8000/embed
 ```
 
 ---
+
+
 
 ### Frontend (React)
 
 Create `Frontend/.env`:
 
 ```env
-REACT_APP_API_URL=http://localhost:5000
+VITE_API_URL=http://localhost:5000
+
 ```
 
 ---
