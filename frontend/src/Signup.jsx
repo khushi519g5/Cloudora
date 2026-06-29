@@ -62,10 +62,10 @@ function Signup() {
             <div className="text-center mb-5">
               <div style={styles.iconCircle}>
                 <img 
-                  src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" 
-                  alt="Logo" 
-                  style={{ width: "40px" }} 
-                />
+  src="/image.png" 
+  alt="Logo" 
+  style={{ width: "40px" }} 
+/>
               </div>
               <h3 className="fw-bold text-dark mt-3">Create Account</h3>
               <p className="text-muted small">Join the Student Management System</p>
