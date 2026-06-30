@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 const API_URL = import.meta.env.VITE_API_URL;
 
 export default function Signup() {
+    console.log("Signup component rendered");
   const navigate = useNavigate();
 
 
