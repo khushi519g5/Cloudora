@@ -6,8 +6,8 @@
 </p>
 
 The name **Cloudora**  combines:
- ☁️ **Cloud** – epresents the platform's ability to store and manage academic resources on cloud infrastructure, making them accessible anytime and from anywhere.
- ✨ **Aura** – Represents a collaborative learning environment where knowledge is shared, organized, and easily accessible.
+ ☁️ **Cloud** : Represents the platform's ability to store and manage academic resources on cloud infrastructure, making them accessible anytime and from anywhere.
+ ✨ **Aura** : Represents a collaborative learning environment where knowledge is shared, organized, and easily accessible.
 **Author:** Khushi Mittal
 </div>
 
@@ -51,7 +51,7 @@ It combines:
 
 ### 🔥 Trending System
 
-* Auto-detects popular resources
+* Auto detects popular resources
 * Based on user interactions and views
 
 ---
@@ -120,11 +120,11 @@ It combines:
 ## 🖥️ UI Preview
 
 <p align="center">
-  <img src="frontend\src\assets\analytics.png" alt="ANALYTICS Page" width="300"/>  
-  <img src="frontend\src\assets\askai.png" alt="ASKAI Page" width="300"/>  
-  <img src="frontend\src\assets\dashboard.png" alt="dashboard page " width="300"/>
-  <img src="frontend\src\assets\recommendations.png" alt="Recommendation Page" width="300"/>
-  <img src="frontend\src\assets\chats.png" alt="Chats Page" width="300"/>
+  <img src="frontend/src/assets/analytics.png" alt="Analytics Page" width="300" style="border:2px solid #d1d5db; border-radius:8px; margin:8px;">
+  <img src="frontend/src/assets/askai.png" alt="AskAI Page" width="300" style="border:2px solid #d1d5db; border-radius:8px; margin:8px;">
+  <img src="frontend/src/assets/dashboard.png" alt="Dashboard Page" width="300" style="border:2px solid #d1d5db; border-radius:8px; margin:8px;">
+  <img src="frontend/src/assets/recommendations.png" alt="Recommendation Page" width="300" style="border:2px solid #d1d5db; border-radius:8px; margin:8px;">
+  <img src="frontend/src/assets/chats.png" alt="Chats Page" width="300" style="border:2px solid #d1d5db; border-radius:8px; margin:8px;">
 </p>
 
 
