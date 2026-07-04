@@ -117,15 +117,43 @@ It combines:
 
 ---
 
+
 ## 🖥️ UI Preview
 
-<p align="center">
-  <img src="frontend/src/assets/analytics.png" alt="Analytics Page" width="300" style="border:2px solid #d1d5db; border-radius:8px; margin:8px;">
-  <img src="frontend/src/assets/askai.png" alt="AskAI Page" width="300" style="border:2px solid #d1d5db; border-radius:8px; margin:8px;">
-  <img src="frontend/src/assets/dashboard.png" alt="Dashboard Page" width="300" style="border:2px solid #d1d5db; border-radius:8px; margin:8px;">
-  <img src="frontend/src/assets/recommendations.png" alt="Recommendation Page" width="300" style="border:2px solid #d1d5db; border-radius:8px; margin:8px;">
-  <img src="frontend/src/assets/chats.png" alt="Chats Page" width="300" style="border:2px solid #d1d5db; border-radius:8px; margin:8px;">
-</p>
+<h2 align="center">📸 Screenshots</h2>
+
+<table align="center">
+<tr>
+<td align="center">
+<b>📊 Analytics Dashboard</b><br><br>
+<img src="frontend/src/assets/analytics.png" width="400">
+</td>
+
+<td align="center">
+<b>🤖 AI Assistant</b><br><br>
+<img src="frontend/src/assets/askai.png" width="400">
+</td>
+</tr>
+
+<tr>
+<td align="center">
+<b>🏠 Student Dashboard</b><br><br>
+<img src="frontend/src/assets/dashboard.png" width="400">
+</td>
+
+<td align="center">
+<b>🎯 Recommendations</b><br><br>
+<img src="frontend/src/assets/recommendations.png" width="400">
+</td>
+</tr>
+
+<!-- <tr>
+<td colspan="2" align="center">
+<b>💬 Peer Messenger</b><br><br>
+<img src="frontend/src/assets/chats.png" width="500">
+</td>
+</tr> -->
+</table>
 
 
 
