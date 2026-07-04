@@ -1,7 +1,7 @@
 
 <div align="center">
 
-<img src="https://readme-typing-svg.herokuapp.com?font=Poppins&weight=700&size=55&pause=1000&color=#000080&center=true&vCenter=true&width=600&repeat=false&lines=📚 Cloudora" />
+<img src="https://readme-typing-svg.herokuapp.com?font=Poppins&weight=700&size=55&pause=1000&color=#000080&center=true&vCenter=true&width=600&repeat=false&lines=Cloudora" />
 
 
 The name **Cloudora**  combines:
