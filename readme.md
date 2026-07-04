@@ -118,7 +118,7 @@ It combines:
 ---
 
 
-## 🖥️ UI Preview
+
 
 <h2 align="center">📸 Screenshots</h2>
 
