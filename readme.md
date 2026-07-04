@@ -1,7 +1,18 @@
 
-# 📚 Cloudora
+<div align="center">
+
+<img src="https://readme-typing-svg.herokuapp.com?font=Poppins&weight=700&size=55&pause=1000&color=#000080&center=true&vCenter=true&width=600&repeat=false&lines=📚 Cloudora" />
+
+
+The name **Cloudora**  combines:
+
+- ☁️ **Cloud** – epresents the platform's ability to store and manage academic resources on cloud infrastructure, making them accessible anytime and from anywhere.
+- ✨ **Aura** – Represents a collaborative learning environment where knowledge is shared, organized, and easily accessible.
+
+
 
 **Author:** Khushi Mittal
+</div>
 
 ---
 
