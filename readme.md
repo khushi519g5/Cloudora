@@ -1,7 +1,15 @@
 
-# 📚 Cloudora
+<div align="center">
 
+<p align="center">
+  <img src="https://readme-typing-svg.herokuapp.com?font=Poppins&weight=700&size=55&pause=1000&color=%23000080&center=true&vCenter=true&width=600&repeat=false&lines=Cloudora" alt="Cloudora" />
+</p>
+
+The name **Cloudora**  combines:
+ ☁️ **Cloud** : Represents the platform's ability to store and manage academic resources on cloud infrastructure, making them accessible anytime and from anywhere.
+ ✨ **Aura** : Represents a collaborative learning environment where knowledge is shared, organized, and easily accessible.
 **Author:** Khushi Mittal
+</div>
 
 ---
 
@@ -43,7 +51,7 @@ It combines:
 
 ### 🔥 Trending System
 
-* Auto-detects popular resources
+* Auto detects popular resources
 * Based on user interactions and views
 
 ---
@@ -109,15 +117,43 @@ It combines:
 
 ---
 
-## 🖥️ UI Preview
 
-<p align="center">
-  <img src="frontend\src\assets\analytics.png" alt="ANALYTICS Page" width="300"/>  
-  <img src="frontend\src\assets\askai.png" alt="ASKAI Page" width="300"/>  
-  <img src="frontend\src\assets\dashboard.png" alt="dashboard page " width="300"/>
-  <img src="frontend\src\assets\recommendations.png" alt="Recommendation Page" width="300"/>
-  <img src="frontend\src\assets\chats.png" alt="Chats Page" width="300"/>
-</p>
+
+
+<h2 align="center">📸 Screenshots</h2>
+
+<table align="center">
+<tr>
+<td align="center">
+<b>📊 Analytics Dashboard</b><br><br>
+<img src="frontend/src/assets/analytics.png" width="400">
+</td>
+
+<td align="center">
+<b>🤖 AI Assistant</b><br><br>
+<img src="frontend/src/assets/askai.png" width="400">
+</td>
+</tr>
+
+<tr>
+<td align="center">
+<b>🏠 Student Dashboard</b><br><br>
+<img src="frontend/src/assets/dashboard.png" width="400">
+</td>
+
+<td align="center">
+<b>🎯 Recommendations</b><br><br>
+<img src="frontend/src/assets/recommendations.png" width="400">
+</td>
+</tr>
+
+<!-- <tr>
+<td colspan="2" align="center">
+<b>💬 Peer Messenger</b><br><br>
+<img src="frontend/src/assets/chats.png" width="500">
+</td>
+</tr> -->
+</table>
 
 
 
