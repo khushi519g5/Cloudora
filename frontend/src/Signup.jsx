@@ -18,12 +18,7 @@ function Signup() {
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-
-    if (error) setError("");
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -38,24 +33,10 @@ function Signup() {
         form
       );
 
-      const token = res.data?.token;
-
-      if (!token) {
-        setError("No token received from server");
-        setLoading(false);
-        return;
-      }
-
+      const token = res.data.token;
       localStorage.setItem("token", token);
 
-      const parts = token.split(".");
-      if (parts.length !== 3) {
-        setError("Invalid token received");
-        setLoading(false);
-        return;
-      }
-
-      const payload = JSON.parse(atob(parts[1]));
+      const payload = JSON.parse(atob(token.split(".")[1]));
       const role = payload.role;
 
       setSuccess("Account created! Redirecting...");
@@ -72,86 +53,158 @@ function Signup() {
     }
   };
 
-  const styles = {
-    pageWrapper: {
-      minHeight: "100vh",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      backgroundColor: "#f8fafc",
-      backgroundImage: `
-        radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%),
-        radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%)
-      `,
-      backgroundAttachment: "fixed",
-    },
-    card: {
-      width: "400px",
-      padding: "2.5rem",
-      borderRadius: "1.25rem",
-      backgroundColor: "rgba(255, 255, 255, 0.95)",
-      backdropFilter: "blur(10px)",
-      boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
-    },
-    input: {
-      width: "100%",
-      padding: "0.75rem",
-      marginBottom: "10px",
-      borderRadius: "0.5rem",
-      border: "1px solid #e2e8f0",
-    },
-    button: {
-      width: "100%",
-      padding: "0.75rem",
-      backgroundColor: "#4f46e5",
-      color: "white",
-      border: "none",
-      borderRadius: "0.5rem",
-      cursor: "pointer",
-    },
-  };
-
   return (
     <div style={styles.pageWrapper}>
       <div style={styles.card}>
-        <h2>Create Account</h2>
+        <div className="text-center mb-4">
+          <div style={styles.iconCircle}>
+            <img src="/image.png" alt="Logo" style={{ width: "40px" }} />
+          </div>
+          <h3>Create Account</h3>
+          <p>Join the Student Management System</p>
+        </div>
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        {success && <p style={{ color: "green" }}>{success}</p>}
+        {error && (
+          <div className="alert alert-danger" style={styles.alert}>
+            {error}
+          </div>
+        )}
+
+        {success && (
+          <div className="alert alert-success" style={styles.alert}>
+            {success}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit}>
-          <input
-            name="name"
-            placeholder="Name"
-            onChange={handleChange}
-            style={styles.input}
-            required
-          />
+          <div className="mb-2">
+            <input
+              type="text"
+              name="name"
+              className="form-control"
+              placeholder="Full Name"
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-          <input
-            name="email"
-            placeholder="Email"
-            onChange={handleChange}
-            style={styles.input}
-            required
-          />
+          <div className="mb-2">
+            <input
+              type="email"
+              name="email"
+              className="form-control"
+              placeholder="Email"
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-          <input
-            name="password"
-            type="password"
-            placeholder="Password"
-            onChange={handleChange}
-            style={styles.input}
-            required
-          />
+          <div className="mb-3">
+            <input
+              type="password"
+              name="password"
+              className="form-control"
+              placeholder="Password"
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-          <button type="submit" style={styles.button} disabled={loading}>
-            {loading ? "Creating..." : "Sign Up"}
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn w-100 text-white"
+            style={loading ? styles.buttonLoading : styles.button}
+          >
+            {loading ? "Signing up..." : "Sign Up"}
           </button>
+          <div style={{ textAlign: "center", marginTop: "1rem", fontSize: "0.9rem" }}>
+  Already have an account?{" "}
+  <span
+    style={{ color: "#4f46e5", cursor: "pointer", fontWeight: 500 }}
+    onClick={() => navigate("/login")}
+  >
+    Login
+  </span>
+</div>
         </form>
       </div>
     </div>
   );
 }
+
+const styles = {
+  pageWrapper: {
+    minHeight: "100vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f8fafc",
+    backgroundImage: `
+      radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%),
+      radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%)
+    `,
+    backgroundAttachment: "fixed",
+  },
+
+  card: {
+    padding: "2.5rem",
+    borderRadius: "1.25rem",
+    backgroundColor: "rgba(255, 255, 255, 0.95)",
+    backdropFilter: "blur(10px)",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
+    width: "100%",
+    maxWidth: "420px",
+  },
+
+  iconCircle: {
+    width: "70px",
+    height: "70px",
+    backgroundColor: "#f1f5f9",
+    borderRadius: "50%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    margin: "0 auto 1rem auto",
+  },
+
+  input: {
+    padding: "0.75rem 1rem",
+    borderRadius: "0.5rem",
+    border: "1px solid #e2e8f0",
+    fontSize: "0.95rem",
+    width: "100%",
+    outline: "none",
+    transition: "all 0.2s ease",
+  },
+
+  button: {
+    backgroundColor: "#4f46e5",
+    border: "none",
+    borderRadius: "0.5rem",
+    fontSize: "1rem",
+    padding: "0.75rem",
+    color: "white",
+    width: "100%",
+    cursor: "pointer",
+    transition: "all 0.2s ease",
+  },
+
+  buttonLoading: {
+    backgroundColor: "#818cf8",
+    border: "none",
+    borderRadius: "0.5rem",
+    padding: "0.75rem",
+    color: "white",
+    width: "100%",
+    cursor: "not-allowed",
+  },
+
+  alert: {
+    borderRadius: "0.5rem",
+    fontSize: "0.85rem",
+    padding: "0.5rem 0.75rem",
+  },
+};
 
 export default Signup;
