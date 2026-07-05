@@ -4,12 +4,9 @@ import { useNavigate } from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
- function Signup() {
-    console.log("Signup component rendered");
+function Signup() {
   const navigate = useNavigate();
 
-
-  console.log("API_URL =", import.meta.env.VITE_API_URL);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -21,13 +18,19 @@ const API_URL = import.meta.env.VITE_API_URL;
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+
     if (error) setError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError("");
+    setSuccess("");
 
     try {
       const res = await axios.post(
@@ -35,21 +38,24 @@ const API_URL = import.meta.env.VITE_API_URL;
         form
       );
 
-      const token = res.data.token;
+      const token = res.data?.token;
+
+      if (!token) {
+        setError("No token received from server");
+        setLoading(false);
+        return;
+      }
+
       localStorage.setItem("token", token);
 
-     if (!token) {
-  setError("No token received from server");
-  return;
-}
+      const parts = token.split(".");
+      if (parts.length !== 3) {
+        setError("Invalid token received");
+        setLoading(false);
+        return;
+      }
 
-const parts = token.split(".");
-if (parts.length !== 3) {
-  setError("Invalid token received");
-  return;
-}
-
-const payload = JSON.parse(atob(parts[1]));
+      const payload = JSON.parse(atob(parts[1]));
       const role = payload.role;
 
       setSuccess("Account created! Redirecting...");
@@ -59,17 +65,12 @@ const payload = JSON.parse(atob(parts[1]));
         else if (role === "teacher") navigate("/teacher-dashboard");
         else navigate("/student-dashboard");
       }, 1000);
-
     } catch (err) {
       setError(err.response?.data?.message || "Signup failed.");
     } finally {
       setLoading(false);
     }
   };
-//   const handleSubmit = (e) => {
-//   e.preventDefault();
-//   console.log("Signup working");
-// };
 
   const styles = {
     pageWrapper: {
@@ -106,30 +107,51 @@ const payload = JSON.parse(atob(parts[1]));
       color: "white",
       border: "none",
       borderRadius: "0.5rem",
+      cursor: "pointer",
     },
   };
 
   return (
     <div style={styles.pageWrapper}>
       <div style={styles.card}>
-
         <h2>Create Account</h2>
 
         {error && <p style={{ color: "red" }}>{error}</p>}
         {success && <p style={{ color: "green" }}>{success}</p>}
 
         <form onSubmit={handleSubmit}>
-          <input name="name" placeholder="Name" onChange={handleChange} style={styles.input} />
-          <input name="email" placeholder="Email" onChange={handleChange} style={styles.input} />
-          <input name="password" type="password" placeholder="Password" onChange={handleChange} style={styles.input} />
+          <input
+            name="name"
+            placeholder="Name"
+            onChange={handleChange}
+            style={styles.input}
+            required
+          />
+
+          <input
+            name="email"
+            placeholder="Email"
+            onChange={handleChange}
+            style={styles.input}
+            required
+          />
+
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            onChange={handleChange}
+            style={styles.input}
+            required
+          />
 
           <button type="submit" style={styles.button} disabled={loading}>
             {loading ? "Creating..." : "Sign Up"}
           </button>
         </form>
-
       </div>
     </div>
   );
 }
+
 export default Signup;
