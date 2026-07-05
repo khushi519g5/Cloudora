@@ -18,7 +18,7 @@ function App() {
     <Routes>
 
       {/* Public */}
-     <Route path="/signup" element={<h1>Signup Page Works</h1>} />
+      <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
 
       {/* Admin only */}
