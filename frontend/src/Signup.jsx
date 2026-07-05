@@ -25,36 +25,51 @@ export default function Signup() {
     if (error) setError("");
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
 
-    try {
-      const res = await axios.post(
-        `${API_URL}/api/auth/signup`,
-        form
-      );
+  //   try {
+  //     const res = await axios.post(
+  //       `${API_URL}/api/auth/signup`,
+  //       form
+  //     );
 
-      const token = res.data.token;
-      localStorage.setItem("token", token);
+  //     const token = res.data.token;
+  //     localStorage.setItem("token", token);
 
-      const payload = JSON.parse(atob(token.split(".")[1]));
-      const role = payload.role;
+  //    if (!token) {
+//   setError("No token received from server");
+//   return;
+// }
 
-      setSuccess("Account created! Redirecting...");
+// const parts = token.split(".");
+// if (parts.length !== 3) {
+//   setError("Invalid token received");
+//   return;
+// }
 
-      setTimeout(() => {
-        if (role === "admin") navigate("/admin-dashboard");
-        else if (role === "teacher") navigate("/teacher-dashboard");
-        else navigate("/student-dashboard");
-      }, 1000);
+// const payload = JSON.parse(atob(parts[1]));
+  //     const role = payload.role;
 
-    } catch (err) {
-      setError(err.response?.data?.message || "Signup failed.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     setSuccess("Account created! Redirecting...");
+
+  //     setTimeout(() => {
+  //       if (role === "admin") navigate("/admin-dashboard");
+  //       else if (role === "teacher") navigate("/teacher-dashboard");
+  //       else navigate("/student-dashboard");
+  //     }, 1000);
+
+  //   } catch (err) {
+  //     setError(err.response?.data?.message || "Signup failed.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  const handleSubmit = (e) => {
+  e.preventDefault();
+  console.log("Signup working");
+};
 
   const styles = {
     pageWrapper: {
