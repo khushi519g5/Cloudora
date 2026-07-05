@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
-import Signup from "./Signup";
+import  Signup from "./Signup.jsx"
 import Login from "./Login";
 import AdminCreateUser from "./AdminCreateUser.jsx";
 import AdminDashboard from "./AdminDashboard.jsx";
