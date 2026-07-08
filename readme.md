@@ -8,7 +8,7 @@
 The name **Cloudora**  combines:
  ☁️ **Cloud** : Represents the platform's ability to store and manage academic resources on cloud infrastructure, making them accessible anytime and from anywhere.
  ✨ **Aura** : Represents a collaborative learning environment where knowledge is shared, organized, and easily accessible.
-**Author:** Khushi Mittal
+
 </div>
 
 ---
