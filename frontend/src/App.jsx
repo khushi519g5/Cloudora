@@ -18,7 +18,10 @@ function App() {
     <Routes>
 
       {/* Public */}
-      <Route path="/signup" element={<Signup />} />
+      <Route
+  path="/signup"
+  element={<h1 style={{ color: "red" }}>TEST</h1>}
+/>
       <Route path="/login" element={<Login />} />
 
       {/* Admin only */}
