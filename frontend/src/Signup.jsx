@@ -57,7 +57,6 @@ function Signup() {
   <>
     <h1 style={{color: "red", fontSize: "50px"}}>TEST123</h1>
     <div style={styles.pageWrapper}>
-    <div style={styles.pageWrapper}>
       <div style={styles.card}>
         <div className="text-center mb-4">
           <div style={styles.iconCircle}>
@@ -132,7 +131,6 @@ function Signup() {
 </div>
         </form>
       </div>
-    </div>
     </div>
     </>
   );
