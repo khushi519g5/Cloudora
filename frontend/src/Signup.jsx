@@ -54,8 +54,7 @@ function Signup() {
   };
 
   return (
-  <>
-    <h1 style={{color: "red", fontSize: "50px"}}>TEST123</h1>
+  
     <div style={styles.pageWrapper}>
       <div style={styles.card}>
         <div className="text-center mb-4">
@@ -132,7 +131,7 @@ function Signup() {
         </form>
       </div>
     </div>
-    </>
+    
   );
 }
 
