@@ -12,3 +12,6 @@ backend/.env
 backend/.env.*
 backend-ai/.env
 backend-ai/.env.*
+# Python
+__pycache__/
+*.py[cod]
